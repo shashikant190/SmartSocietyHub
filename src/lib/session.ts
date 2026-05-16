@@ -2,11 +2,18 @@ import { SignJWT, jwtVerify } from "jose";
 
 // SECURITY: Never use fallback in production — checked lazily to avoid build-time crash
 let _encodedKey: Uint8Array | null = null;
+function getSessionSecret() {
+  return process.env.SESSION_SECRET || process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+}
+
 function getEncodedKey(): Uint8Array {
   if (_encodedKey) return _encodedKey;
-  const secretKey = process.env.NEXTAUTH_SECRET;
+  const secretKey = getSessionSecret();
   if (!secretKey && process.env.NODE_ENV === "production") {
-    throw new Error("CRITICAL: NEXTAUTH_SECRET must be set in production!");
+    throw new Error("CRITICAL: SESSION_SECRET or AUTH_SECRET or NEXTAUTH_SECRET must be set in production!");
+  }
+  if (secretKey && secretKey.length < 32 && process.env.NODE_ENV === "production") {
+    throw new Error("CRITICAL: session secret must be at least 32 characters in production!");
   }
   _encodedKey = new TextEncoder().encode(secretKey || "dev-secret-local-only");
   return _encodedKey;
