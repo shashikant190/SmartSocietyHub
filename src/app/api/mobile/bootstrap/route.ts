@@ -11,7 +11,7 @@ export async function GET() {
   const isAdmin = ["chairman", "secretary", "treasurer"].includes(session.role);
   const residentFlatNumber = isResident ? await userFlatNumberFilter(session.flatId) : null;
 
-  const [user, notifications, notices, complaints, bills, visitors, packages] = await Promise.all([
+  const [user, notifications, notices, complaints, bills, visitors, packages, staff, forumThreads, events, parkingSlots] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.userId },
       select: {
@@ -68,6 +68,52 @@ export async function GET() {
           select: { id: true, courierName: true, status: true, receivedAt: true, collectedAt: true },
         })
       : Promise.resolve([]),
+    session.flatId
+      ? prisma.domesticStaff.findMany({
+          where: {
+            societyId: session.societyId,
+            isActive: true,
+            flatLinks: {
+              some: { flatId: session.flatId, isActive: true },
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+            category: true,
+            phone: true,
+            flatLinks: {
+              where: { flatId: session.flatId, isActive: true },
+              select: { agreedMonthlyPay: true, schedule: true },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 6,
+        })
+      : Promise.resolve([]),
+    prisma.forumThread.findMany({
+      where: { societyId: session.societyId },
+      include: {
+        author: { select: { name: true, role: true } },
+        _count: { select: { replies: true } },
+      },
+      orderBy: [{ isPinned: "desc" }, { lastActivityAt: "desc" }],
+      take: 4,
+    }),
+    prisma.societyEvent.findMany({
+      where: { societyId: session.societyId, startDate: { gte: new Date() } },
+      select: { id: true, title: true, venue: true, startDate: true, category: true },
+      orderBy: { startDate: "asc" },
+      take: 4,
+    }),
+    session.flatId
+      ? prisma.parkingSlot.findMany({
+          where: { societyId: session.societyId, flatId: session.flatId, isAssigned: true },
+          select: { id: true, slotNumber: true, slotType: true, level: true, wing: true, vehicleNo: true },
+          orderBy: { createdAt: "desc" },
+          take: 3,
+        })
+      : Promise.resolve([]),
   ]);
 
   return Response.json({
@@ -78,6 +124,10 @@ export async function GET() {
     bills,
     visitors,
     packages,
+    staff,
+    forumThreads,
+    events,
+    parkingSlots,
     generatedAt: new Date().toISOString(),
   });
 }
