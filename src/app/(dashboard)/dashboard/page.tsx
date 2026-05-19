@@ -24,6 +24,7 @@ import {
   Landmark,
   Megaphone,
   MessageSquare,
+  MoreHorizontal,
   Package,
   Phone,
   PiggyBank,
@@ -33,6 +34,7 @@ import {
   Shield,
   ShoppingBag,
   TrendingUp,
+  User,
   UserCheck,
   UserPlus,
   Users,
@@ -62,6 +64,16 @@ interface DashboardData {
 
 interface MyBillsData {
   stats: { totalPending: number; totalPaid: number };
+}
+
+interface ResidentBootstrapData {
+  notices?: Array<{ id: string; title: string; category: string; createdAt: string }>;
+  visitors?: Array<{ id: string; visitorName: string; purpose: string; status: string; expectedAt?: string | null; entryTime?: string | null; exitTime?: string | null }>;
+  packages?: Array<{ id: string; courierName: string | null; status: string; receivedAt: string; collectedAt?: string | null }>;
+  staff?: Array<{ id: string; name: string; category: string; phone: string; flatLinks?: Array<{ agreedMonthlyPay: number | null; schedule: string | null }> }>;
+  forumThreads?: Array<{ id: string; title: string; author?: { name: string; role: string }; _count?: { replies: number } }>;
+  events?: Array<{ id: string; title: string; venue: string | null; startDate: string; category: string }>;
+  parkingSlots?: Array<{ id: string; slotNumber: string; slotType: string; level: string | null; wing: string | null; vehicleNo: string | null }>;
 }
 
 type Role = string;
@@ -340,6 +352,286 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
   );
 }
 
+function formatShortDate(date?: string | null) {
+  if (!date) return "No date";
+  return new Date(date).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+}
+
+function formatShortTime(date?: string | null) {
+  if (!date) return "Time not set";
+  return new Date(date).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+}
+
+function PriorityCard({
+  href,
+  label,
+  value,
+  icon: Icon,
+  gradient,
+  reverse = false,
+}: {
+  href: string;
+  label: string;
+  value: string;
+  icon: typeof Shield;
+  gradient: string;
+  reverse?: boolean;
+}) {
+  return (
+    <Link href={href} className="group block">
+      <div className={`relative flex min-h-[112px] items-center overflow-hidden border border-white/40 bg-gradient-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[2rem_1.5rem_2rem_1.5rem]" : "rounded-[1.5rem_2rem_1.5rem_2rem]"}`}>
+        <Icon className="absolute -bottom-3 -right-3 h-20 w-20 text-white opacity-[0.08] transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-110" />
+        <div className="relative z-10 flex w-full items-center gap-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/20 shadow-sm backdrop-blur-md">
+            <Icon className="h-6 w-6 text-white" />
+          </div>
+          <div className="h-10 w-px shrink-0 bg-white/20" />
+          <div className="min-w-0 flex-1">
+            <h3 className="mb-1 truncate border-b border-white/20 pb-1 text-base font-black leading-tight text-white">{label}</h3>
+            <p className="truncate text-xs font-semibold text-white/85">{value}</p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function EmptyMiniState({ text }: { text: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs font-bold text-text-secondary">
+      {text}
+    </div>
+  );
+}
+
+function ResidentDashboard({
+  user,
+  data,
+  myBills,
+  bootstrap,
+}: {
+  user: ReturnType<typeof useUser>["user"];
+  data: DashboardData | null;
+  myBills: MyBillsData | null;
+  bootstrap: ResidentBootstrapData | null;
+}) {
+  const notices = bootstrap?.notices || [];
+  const visitors = bootstrap?.visitors || [];
+  const packages = bootstrap?.packages || [];
+  const staff = bootstrap?.staff || [];
+  const forumThreads = bootstrap?.forumThreads || [];
+  const events = bootstrap?.events || [];
+  const parkingSlot = bootstrap?.parkingSlots?.[0];
+  const pendingPackages = packages.filter((pkg) => !["collected", "returned"].includes(pkg.status)).length;
+  const activeVisitors = visitors.filter((visitor) => ["pending_approval", "expected", "inside", "approved"].includes(visitor.status)).length;
+
+  return (
+    <div className="-m-4 min-h-full bg-[#f8f4f2] p-4 lg:-m-6 lg:p-8">
+      <div className="mx-auto max-w-[1600px] space-y-6 pb-24 lg:pb-8">
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <div className="w-full flex-1 space-y-6 lg:w-2/3 xl:w-[70%]">
+            <section className="relative flex min-h-[210px] items-center justify-between overflow-hidden rounded-[2rem] bg-[#000328] p-6 shadow-sm lg:min-h-[230px] lg:p-8">
+              <div className="absolute inset-0">
+                <img
+                  src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80"
+                  alt="Society building"
+                  className="h-full w-full object-cover opacity-60"
+                />
+              </div>
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,3,40,0.96)_0%,rgba(0,69,142,0.42)_100%)]" />
+              <div className="relative z-10 max-w-xl">
+                <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-white drop-shadow-md lg:text-5xl">
+                  {greeting()}, <br className="hidden lg:block" />
+                  <span className="text-emerald-400">{user?.name?.split(" ")[0] || "Resident"}</span>
+                </h1>
+                <p className="mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/75 lg:text-base">
+                  <Building2 className="h-4 w-4 text-white/50" />
+                  <span>{user?.societyName || "Your society"}</span>
+                  {user?.flatNumber && <span className="h-1.5 w-1.5 rounded-full bg-white/25" />}
+                  {user?.flatNumber && <span className="font-bold text-white">Unit {user.flatNumber}</span>}
+                </p>
+              </div>
+              <div className="relative z-10 hidden shrink-0 pr-2 sm:block lg:pr-6">
+                <div className="relative h-32 w-32 rounded-full border border-white/40 bg-white/20 p-2 shadow-xl backdrop-blur-md lg:h-44 lg:w-44">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-blue-600 text-4xl font-black text-white lg:text-6xl">
+                    {user?.name?.slice(0, 1) || "R"}
+                  </div>
+                  <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-white/95 px-4 py-1.5 shadow-sm backdrop-blur-sm">
+                    <UserCheck className="h-4 w-4 text-emerald-600" />
+                    <span className="text-[11px] font-black uppercase tracking-widest text-text-primary">{user?.role === "tenant" ? "Tenant" : "Resident"}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="grid grid-cols-2 gap-3 lg:gap-4 xl:grid-cols-4">
+              <PriorityCard href="/my-bills" label="My Bills" value={`Due: ${formatCurrency(myBills?.stats?.totalPending || 0)}`} icon={CreditCard} gradient="from-emerald-500 to-emerald-700" />
+              <PriorityCard href="/staff" label="My Staff" value={`Scheduled: ${staff.length}`} icon={Wrench} gradient="from-blue-500 to-blue-700" reverse />
+              <PriorityCard href="/packages" label="Deliveries" value={`Pending: ${pendingPackages}`} icon={Package} gradient="from-purple-500 to-purple-700" />
+              <PriorityCard href="/emergency" label="Emergency" value="Alert security" icon={Phone} gradient="from-rose-500 to-rose-700" reverse />
+            </section>
+
+            <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
+              <div className="flex flex-col rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <h3 className="text-lg font-black tracking-tight text-text-primary">Visitors</h3>
+                  <Link href="/my-visitors" className="rounded-full bg-primary/5 px-3 py-1.5 text-xs font-black text-primary">Pre-approve</Link>
+                </div>
+                <div className="flex-1 space-y-3">
+                  {visitors.length === 0 ? <EmptyMiniState text="No recent visitors." /> : visitors.slice(0, 3).map((visitor) => (
+                    <Link key={visitor.id} href="/my-visitors" className="flex items-center justify-between rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-100">
+                          <User className="h-5 w-5 text-indigo-600" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-black text-text-primary">{visitor.visitorName}</p>
+                          <p className="truncate text-xs font-semibold text-text-secondary">{visitor.purpose} · {formatShortTime(visitor.entryTime || visitor.expectedAt)}</p>
+                        </div>
+                      </div>
+                      <span className="ml-2 shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-800">{visitor.status.replace("_", " ")}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <h3 className="text-lg font-black tracking-tight text-text-primary">Discussions</h3>
+                  <Link href="/forum" className="text-xs font-black text-text-secondary hover:text-text-primary">View All</Link>
+                </div>
+                <div className="flex-1 space-y-3">
+                  {forumThreads.length === 0 ? <EmptyMiniState text="No discussions yet." /> : forumThreads.slice(0, 3).map((thread) => (
+                    <Link key={thread.id} href="/forum" className="block rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm">
+                      <h4 className="line-clamp-1 text-sm font-black text-text-primary">{thread.title}</h4>
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="truncate text-xs font-semibold text-text-secondary">{thread.author?.name || "Resident"}</span>
+                        <span className="flex items-center gap-1.5 text-xs font-black text-text-secondary"><MessageSquare className="h-3.5 w-3.5" />{thread._count?.replies || 0}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className="mb-4 flex items-center justify-between px-1">
+                <h3 className="text-xl font-black tracking-tight text-text-primary">Community Quick Links</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
+                {[
+                  { href: "/amenities", label: "Amenities", icon: Building2, bg: "from-teal-400 to-emerald-500", shadow: "shadow-emerald-500/30" },
+                  { href: "/complaints", label: "Helpdesk", icon: AlertTriangle, bg: "from-rose-400 to-pink-500", shadow: "shadow-rose-500/30" },
+                  { href: "/directory", label: "Directory", icon: BookOpen, bg: "from-violet-400 to-purple-500", shadow: "shadow-violet-500/30" },
+                  { href: "/events", label: "Events", icon: CalendarCheck, bg: "from-amber-400 to-orange-500", shadow: "shadow-orange-500/30" },
+                  { href: "/marketplace", label: "Buy & Sell", icon: ShoppingBag, bg: "from-sky-400 to-blue-500", shadow: "shadow-blue-500/30" },
+                  { href: "/parking", label: "Parking", icon: Car, bg: "from-lime-400 to-emerald-500", shadow: "shadow-lime-500/30" },
+                  { href: "/polls", label: "Polls", icon: Vote, bg: "from-fuchsia-400 to-purple-500", shadow: "shadow-fuchsia-500/30" },
+                  { href: "/documents", label: "Docs", icon: FolderOpen, bg: "from-slate-500 to-slate-700", shadow: "shadow-slate-500/30" },
+                ].map((service, index) => {
+                  const Icon = service.icon;
+                  return (
+                    <Link key={service.href} href={service.href} className={`group relative flex flex-col items-center justify-center gap-4 overflow-hidden border border-border bg-white p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-lg ${index % 2 === 0 ? "rounded-[2rem_2.5rem_2rem_2.5rem]" : "rounded-[2.5rem_2rem_2.5rem_2rem]"}`}>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${service.bg} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.04]`} />
+                      <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${service.bg} shadow-lg ${service.shadow} transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110`}>
+                        <Icon className="h-7 w-7 text-white" />
+                      </div>
+                      <span className="relative z-10 text-sm font-black text-text-primary">{service.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+
+          <aside className="flex w-full flex-col gap-6 lg:w-1/3 xl:w-[30%]">
+            <div className="relative rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-black tracking-tight text-text-primary">Notice Board</h3>
+                <Link href="/notices" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></Link>
+              </div>
+              <div className="relative h-[170px] overflow-hidden">
+                {notices.length === 0 ? <EmptyMiniState text="No notices posted yet." /> : (
+                  <div className="space-y-4 border-l-2 border-border pl-4">
+                    {notices.slice(0, 4).map((notice, index) => (
+                      <div key={notice.id} className="relative">
+                        <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-white ${index === 0 ? "bg-primary" : "bg-slate-300"}`} />
+                        <p className="mb-1 text-[11px] font-black uppercase tracking-wider text-primary">{formatShortDate(notice.createdAt)}</p>
+                        <h4 className="line-clamp-1 text-sm font-black text-text-primary">{notice.title}</h4>
+                        <p className="mt-1 text-xs font-semibold text-text-secondary">{notice.category}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5">
+                <Link href="/notices" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Notices</Link>
+              </div>
+            </div>
+
+            <div className="relative rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-black tracking-tight text-text-primary">Events</h3>
+                <Link href="/events" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><CalendarCheck className="h-5 w-5 text-text-secondary" /></Link>
+              </div>
+              <div className="relative h-[170px] overflow-hidden">
+                {events.length === 0 ? <EmptyMiniState text="No upcoming events." /> : (
+                  <div className="space-y-1">
+                    {events.slice(0, 4).map((event) => (
+                      <Link key={event.id} href="/events" className="group flex items-center gap-3 rounded-xl border border-transparent p-2 transition-colors hover:border-border hover:bg-surface">
+                        <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
+                          <span className="text-[10px] font-black uppercase leading-tight text-primary">{new Date(event.startDate).toLocaleDateString("en-IN", { month: "short" })}</span>
+                          <span className="text-lg font-black leading-none text-primary">{new Date(event.startDate).getDate()}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="truncate text-sm font-black text-text-primary">{event.title}</h4>
+                          <p className="mt-0.5 truncate text-xs font-semibold text-text-secondary">{event.venue || "Society"} · {formatShortTime(event.startDate)}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5">
+                <Link href="/events" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Events</Link>
+              </div>
+            </div>
+
+            <Link href="/parking" className="group relative block h-[220px] overflow-hidden rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white shadow-sm transition-all duration-500 hover:border-emerald-200">
+              <div className="absolute bottom-0 right-0 z-0 h-44 w-56">
+                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80" alt="Parking" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#fff_0%,#fff_30%,transparent_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,#fff_0%,transparent_60%)]" />
+              </div>
+              <div className="absolute inset-0 z-10 flex flex-col justify-between p-6 lg:p-7">
+                <div className="flex items-start justify-between">
+                  <div className="flex flex-col items-start gap-2">
+                    <h3 className="text-xl font-black tracking-tight text-text-primary">My Parking</h3>
+                    <div className="flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1.5 shadow-sm">
+                      <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">{parkingSlot ? "Assigned" : "Not assigned"}</span>
+                    </div>
+                  </div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white shadow-sm transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50">
+                    <Car className="h-5 w-5 text-text-secondary transition-colors group-hover:text-emerald-600" />
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-text-secondary">Assigned Slot</p>
+                  <div className="flex items-end gap-3">
+                    <h3 className="font-mono text-4xl font-black tracking-tight text-text-primary lg:text-5xl">{parkingSlot?.slotNumber || "--"}</h3>
+                    <span className="pb-1 text-sm font-black text-text-secondary lg:pb-1.5">{parkingSlot?.level || parkingSlot?.wing || "Parking"}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const { user, loaded } = useUser();
   const [expanded, setExpanded] = useState("operations");
@@ -351,6 +643,11 @@ export default function DashboardPage() {
     interval: 60_000,
     enabled: loaded && !isAdmin && !!user?.flatNumber,
   });
+  const { data: residentBootstrap } = useLiveData<ResidentBootstrapData>({
+    url: "/api/mobile/bootstrap",
+    interval: 120_000,
+    enabled: loaded && !isAdmin,
+  });
 
   const visibleCategories = useMemo(() => {
     const role = user?.role || "member";
@@ -361,6 +658,17 @@ export default function DashboardPage() {
 
   const dueAmount = isAdmin ? data?.pendingAmount || 0 : myBills?.stats.totalPending || 0;
   const paidAmount = isAdmin ? data?.totalCollected || 0 : myBills?.stats.totalPaid || 0;
+
+  if (loaded && !isAdmin) {
+    return (
+      <ResidentDashboard
+        user={user}
+        data={data}
+        myBills={myBills}
+        bootstrap={residentBootstrap}
+      />
+    );
+  }
 
   return (
     <div className="-m-4 min-h-full bg-[#fbf7f5] p-4 lg:-m-6 lg:p-8">
