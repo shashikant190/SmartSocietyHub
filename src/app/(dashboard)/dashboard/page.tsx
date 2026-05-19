@@ -634,7 +634,7 @@ function ResidentDashboard({
 
 export default function DashboardPage() {
   const { user, loaded } = useUser();
-  const [expanded, setExpanded] = useState("operations");
+  const [expanded, setExpanded] = useState("");
   const isAdmin = admin.includes(user?.role || "");
 
   const { data, loading, isStale } = useLiveData<DashboardData>({ url: "/api/dashboard", interval: 60_000, enabled: true });
@@ -651,9 +651,13 @@ export default function DashboardPage() {
 
   const visibleCategories = useMemo(() => {
     const role = user?.role || "member";
-    return categories
+    const filtered = categories
       .map((category) => ({ ...category, modules: category.modules.filter((module) => module.roles.includes(role)) }))
       .filter((category) => category.modules.length > 0);
+    if (!admin.includes(role)) return filtered;
+
+    const adminOrder = ["management", "operations", "finance", "community", "governance"];
+    return [...filtered].sort((a, b) => adminOrder.indexOf(a.id) - adminOrder.indexOf(b.id));
   }, [user?.role]);
 
   const dueAmount = isAdmin ? data?.pendingAmount || 0 : myBills?.stats.totalPending || 0;
@@ -715,7 +719,7 @@ export default function DashboardPage() {
                 category={category}
                 expanded={expanded === category.id}
                 count={category.modules.length}
-                onClick={() => setExpanded(category.id)}
+                onClick={() => setExpanded((current) => current === category.id ? "" : category.id)}
               />
               <AnimatePresence initial={false}>
                 {expanded === category.id && (

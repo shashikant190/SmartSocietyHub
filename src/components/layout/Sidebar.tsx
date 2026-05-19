@@ -144,14 +144,12 @@ export default function Sidebar({
     router.push("/login");
   };
 
-  const minimalItems = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/dashboard#notifications", label: "Notifications", icon: Bell },
-    { href: "/dashboard#profile", label: "Profile", icon: Users },
-    ...( ["chairman", "secretary"].includes(userRole)
-      ? [{ href: "/settings", label: "Settings", icon: Settings }]
-      : []),
-  ];
+  const visibleSections = navSections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => !item.roles || item.roles.includes(userRole)),
+    }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <>
@@ -191,30 +189,34 @@ export default function Sidebar({
           </div>
         </div>
 
-        <div className="px-4 pt-4">
-          <div className="rounded-2xl bg-primary/5 border border-primary/10 p-3">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Simple Navigation</p>
-            <p className="text-xs text-text-secondary mt-1">Use dashboard cards to open modules.</p>
-          </div>
-        </div>
-
         <nav className="flex-1 p-3 overflow-y-auto">
-          <div className="space-y-2">
-            {minimalItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = item.href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(item.href);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`sidebar-link ${isActive ? "active" : ""}`}
-                  onClick={onClose}
-                >
-                  <Icon className="w-[18px] h-[18px]" />
-                  {item.label}
-                </Link>
-              );
-            })}
+          <div className="space-y-4">
+            {visibleSections.map((section) => (
+              <div key={section.title || "main"}>
+                {section.title && (
+                  <p className="px-3 pb-1.5 text-[10px] font-black uppercase tracking-widest text-text-tertiary">
+                    {section.title}
+                  </p>
+                )}
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = item.href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`sidebar-link ${isActive ? "active" : ""}`}
+                        onClick={onClose}
+                      >
+                        <Icon className="w-[18px] h-[18px]" />
+                        <span className="truncate">{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </nav>
 
