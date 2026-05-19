@@ -10,7 +10,7 @@ const ROLE_PERMISSIONS: Record<string, string[]> = {
     "notifications", "manage_users"
   ],
   secretary: [
-    "dashboard", "members", "maintenance", "bills", "notices", "complaints",
+    "dashboard", "members", "maintenance", "bills", "expenses", "notices", "complaints",
     "reminders", "visitors", "parking", "facilities", "emergency",
     "documents", "meetings", "polls", "activity_log", "notifications"
   ],

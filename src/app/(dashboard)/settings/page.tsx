@@ -574,7 +574,7 @@ export default function SettingsPage() {
                   { module: "Dashboard", c: true, s: true, t: true, m: true },
                   { module: "Members & Flats", c: true, s: true, t: true, m: false },
                   { module: "Maintenance Bills", c: true, s: true, t: true, m: true },
-                  { module: "Expenses", c: true, s: false, t: true, m: false },
+                  { module: "Expenses", c: true, s: true, t: true, m: false },
                   { module: "Reports", c: true, s: true, t: true, m: false },
                   { module: "Notices", c: true, s: true, t: true, m: true },
                   { module: "Complaints", c: true, s: true, t: true, m: true },

@@ -570,6 +570,12 @@ model Expense {
   tdsPercent  Float    @default(0) // TDS percentage applied
   netPayable  Float?   // amount - tdsAmount
   fundId      String?  // Link to fund account
+  billProofFileName String?
+  billProofFileType String?
+  billProofDataUrl  String?
+  billProofUploadedAt DateTime?
+  billProofVerifiedAt DateTime?
+  billProofVerifiedBy String?
   vendor      Vendor?  @relation(fields: [vendorId], references: [id])
   fund        FundAccount? @relation(fields: [fundId], references: [id])
   createdAt   DateTime @default(now())

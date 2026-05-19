@@ -77,7 +77,7 @@ const navSections: NavSection[] = [
     items: [
       { href: "/maintenance", label: "Billing & Ledger", icon: Receipt, roles: ["chairman", "secretary", "treasurer"] },
       { href: "/my-bills", label: "My Bills", icon: CreditCard, roles: ["member", "tenant"] },
-      { href: "/expenses", label: "Expenses", icon: Wallet, roles: ["chairman", "treasurer"] },
+      { href: "/expenses", label: "Expenses", icon: Wallet, roles: ["chairman", "secretary", "treasurer"] },
       { href: "/funds", label: "Fund Accounts", icon: PiggyBank, roles: ["chairman", "treasurer"] },
       { href: "/budgets", label: "Budget Planning", icon: TrendingUp, roles: ["chairman", "treasurer"] },
       { href: "/salaries", label: "Staff Payroll", icon: HandCoins, roles: ["chairman", "treasurer"] },

@@ -97,6 +97,12 @@ export interface ExpenseType {
   paidTo: string | null;
   paidOn: Date;
   notes: string | null;
+  billProofFileName: string | null;
+  billProofFileType: string | null;
+  billProofDataUrl: string | null;
+  billProofUploadedAt: Date | null;
+  billProofVerifiedAt: Date | null;
+  billProofVerifiedBy: string | null;
   createdAt: Date;
 }
 
