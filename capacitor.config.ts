@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'public',
   
   server: {
-    url: 'https://society-maintenance-manager.vercel.app',
+    url: 'https://society-connect-one.vercel.app',
     cleartext: false,
   },
 

@@ -171,7 +171,7 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 h-[100dvh] pb-safe overflow-hidden border-r border-blue-100/80 bg-white/95 shadow-xl shadow-blue-950/5 backdrop-blur flex flex-col transition-[width,transform] duration-300 ease-in-out lg:translate-x-0 lg:rounded-r-[2rem] ${
+        className={`fixed top-0 left-0 z-50 h-[100dvh] pb-safe overflow-hidden border-r border-blue-100/80 bg-white/95 shadow-xl shadow-blue-950/5 backdrop-blur flex flex-col transition-[width,transform] duration-300 ease-in-out dark:border-slate-800 dark:bg-[#0f172a]/95 lg:translate-x-0 lg:rounded-r-[2rem] ${
           isCompact ? "w-[5.25rem]" : "w-72 max-w-[18rem]"
         } ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -228,7 +228,7 @@ export default function Sidebar({
                   <button
                     type="button"
                     onClick={() => toggleSection(section.title)}
-                    className="flex w-full items-center justify-between px-2 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-500"
+                    className="flex w-full items-center justify-between px-2 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400"
                   >
                     <span>{section.title}</span>
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${collapsedSections[section.title] ? "-rotate-90" : ""}`} />
@@ -245,8 +245,8 @@ export default function Sidebar({
                         title={item.label}
                         className={`group flex items-center gap-3 rounded-xl font-bold transition-all ${
                           isCompact
-                            ? `h-12 w-12 justify-center ${isActive ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-500 hover:bg-slate-50 hover:text-blue-700"}`
-                            : `px-3 py-3 text-sm ${isActive ? "bg-blue-50 text-blue-700 shadow-sm" : "text-slate-600 hover:bg-slate-50 hover:text-slate-950"}`
+                            ? `h-12 w-12 justify-center ${isActive ? "bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-500/15 dark:text-blue-200" : "text-slate-500 hover:bg-slate-50 hover:text-blue-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-blue-200"}`
+                            : `px-3 py-3 text-sm ${isActive ? "bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-500/15 dark:text-blue-200" : "text-slate-600 hover:bg-slate-50 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"}`
                         }`}
                         onClick={onClose}
                       >
@@ -256,7 +256,7 @@ export default function Sidebar({
                     );
                   })}
                 </div>
-                {isCompact && section.title && <div className="mx-auto my-2 h-px w-8 bg-slate-100" />}
+                {isCompact && section.title && <div className="mx-auto my-2 h-px w-8 bg-slate-100 dark:bg-slate-800" />}
               </div>
             ))}
           </div>
@@ -266,7 +266,7 @@ export default function Sidebar({
         <div className={`mt-auto ${isCompact ? "p-3" : "p-4"}`}>
           {!isCompact && (
             <div className="flex items-center gap-2 px-3 py-2 mb-2">
-              <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider">
+              <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider dark:text-slate-400">
                 {userRole}
               </span>
             </div>

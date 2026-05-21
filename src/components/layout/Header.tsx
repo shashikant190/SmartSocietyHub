@@ -84,12 +84,12 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-border px-4 lg:px-6">
+    <header className="sticky top-0 z-30 bg-white/95 border-b border-border px-4 backdrop-blur lg:px-6 dark:bg-[#0f172a]/95">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center gap-3">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden p-2 rounded-lg hover:bg-surface transition-colors"
+              className="lg:hidden p-2 rounded-lg hover:bg-surface transition-colors"
           >
             <Menu className="w-5 h-5 text-text-secondary" />
           </button>
@@ -124,7 +124,7 @@ export default function Header({
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowProfile(!showProfile)}
-              className="flex items-center gap-2.5 pl-3 border-l border-border hover:bg-surface/50 rounded-xl px-2 py-1.5 transition-colors cursor-pointer"
+            className="flex items-center gap-2.5 pl-3 border-l border-border hover:bg-surface/50 rounded-xl px-2 py-1.5 transition-colors cursor-pointer"
             >
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm">
                 <span className="text-white text-xs font-bold">{initials}</span>
@@ -137,7 +137,7 @@ export default function Header({
             </button>
 
             {showProfile && (
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl border border-border/60 shadow-2xl shadow-black/10 overflow-hidden animate-in fade-in zoom-in-95 duration-150 z-50">
+              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-2xl border border-border/60 shadow-2xl shadow-black/10 overflow-hidden animate-in fade-in zoom-in-95 duration-150 z-50 dark:bg-[#111827]">
                 {/* Profile Info */}
                 <div className="p-4 bg-surface/30 border-b border-border/30">
                   <div className="flex items-center gap-3">

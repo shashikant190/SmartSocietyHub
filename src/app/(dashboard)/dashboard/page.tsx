@@ -246,7 +246,7 @@ function ModuleCard({ module }: { module: ModuleItem }) {
   const Icon = module.icon;
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>
-      <Link href={module.href} className="group flex min-h-[104px] flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_4px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
+      <Link href={module.href} className="group flex min-h-[104px] flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_4px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/20 dark:hover:border-primary/40">
         <div className="flex items-start justify-between gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/7 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
             <Icon className="h-4 w-4" />
@@ -254,7 +254,7 @@ function ModuleCard({ module }: { module: ModuleItem }) {
           <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
         </div>
         <div className="min-w-0">
-          <h3 className="truncate text-sm font-black text-slate-950">{module.label}</h3>
+          <h3 className="truncate text-sm font-black text-slate-950 dark:text-slate-50">{module.label}</h3>
           <p className="mt-1 line-clamp-1 text-xs font-medium text-slate-500">{module.note}</p>
         </div>
       </Link>
@@ -300,17 +300,17 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
       className="overflow-hidden rounded-b-2xl"
     >
-      <div className="relative rounded-[1.75rem] border border-white/80 bg-white/95 p-5 shadow-md shadow-slate-900/5 backdrop-blur sm:p-6">
+      <div className="relative rounded-[1.75rem] border border-white/80 bg-white/95 p-5 shadow-md shadow-slate-900/5 backdrop-blur dark:border-slate-700 dark:bg-slate-900/95 dark:shadow-black/20 sm:p-6">
         <div className={`absolute left-8 top-0 h-1.5 w-24 rounded-b-full bg-gradient-to-r ${category.color}`} />
-        <div className="absolute -top-3 left-10 h-3 w-10 rounded-t-xl bg-white/95" />
+        <div className="absolute -top-3 left-10 h-3 w-10 rounded-t-xl bg-white/95 dark:bg-slate-900/95" />
 
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-primary">Workspace</p>
-            <h2 className="mt-1 text-xl font-black text-slate-950">{category.title}</h2>
+            <h2 className="mt-1 text-xl font-black text-slate-950 dark:text-slate-50">{category.title}</h2>
             <p className="mt-1 text-xs font-medium text-slate-500">{category.description}</p>
           </div>
-          <span className="hidden rounded-full bg-slate-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500 sm:inline">
+          <span className="hidden rounded-full bg-slate-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:bg-slate-800 dark:text-slate-300 sm:inline">
             No crowded menus
           </span>
         </div>
@@ -329,7 +329,7 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
                   <Link
                     key={action.href}
                     href={action.href}
-                    className="flex min-h-[72px] flex-col justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-black text-slate-950 shadow-[0_1px_4px_rgba(15,23,42,0.05)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-[0_8px_20px_rgba(15,23,42,0.07)]"
+                    className="flex min-h-[72px] flex-col justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-black text-slate-950 shadow-[0_1px_4px_rgba(15,23,42,0.05)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-[0_8px_20px_rgba(15,23,42,0.07)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:shadow-black/20 dark:hover:border-primary/40"
                   >
                     <Icon className="h-4 w-4 text-primary" />
                     <span>{action.label}</span>
@@ -340,10 +340,10 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
           </div>
         )}
 
-        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3">
+        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/70">
           <BellRing className="h-4 w-4 shrink-0 text-amber-600" />
           <div>
-            <p className="text-xs font-black text-slate-950">Recent activity</p>
+            <p className="text-xs font-black text-slate-950 dark:text-slate-50">Recent activity</p>
             <p className="mt-0.5 text-xs font-medium text-slate-500">Latest updates from this area appear in notifications and module pages.</p>
           </div>
         </div>
@@ -398,7 +398,7 @@ function PriorityCard({
 
 function EmptyMiniState({ text }: { text: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs font-bold text-text-secondary">
+    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs font-bold text-text-secondary dark:border-slate-700 dark:bg-slate-800/70">
       {text}
     </div>
   );
@@ -426,7 +426,7 @@ function ResidentDashboard({
   const activeVisitors = visitors.filter((visitor) => ["pending_approval", "expected", "inside", "approved"].includes(visitor.status)).length;
 
   return (
-    <div className="-m-4 min-h-full bg-[#f8f4f2] p-4 lg:-m-6 lg:p-8">
+    <div className="-m-4 min-h-full bg-[#f8f4f2] p-4 dark:bg-[#07111f] lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-6 pb-24 lg:pb-8">
         <div className="flex flex-col gap-6 lg:flex-row">
           <div className="w-full flex-1 space-y-6 lg:w-2/3 xl:w-[70%]">
@@ -456,7 +456,7 @@ function ResidentDashboard({
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-blue-600 text-4xl font-black text-white lg:text-6xl">
                     {user?.name?.slice(0, 1) || "R"}
                   </div>
-                  <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-white/95 px-4 py-1.5 shadow-sm backdrop-blur-sm">
+                  <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-white/95 px-4 py-1.5 shadow-sm backdrop-blur-sm dark:bg-slate-900/95">
                     <UserCheck className="h-4 w-4 text-emerald-600" />
                     <span className="text-[11px] font-black uppercase tracking-widest text-text-primary">{user?.role === "tenant" ? "Tenant" : "Resident"}</span>
                   </div>
@@ -472,14 +472,14 @@ function ResidentDashboard({
             </section>
 
             <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
-              <div className="flex flex-col rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+              <div className="flex flex-col rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
                 <div className="mb-5 flex items-center justify-between">
                   <h3 className="text-lg font-black tracking-tight text-text-primary">Visitors</h3>
                   <Link href="/my-visitors" className="rounded-full bg-primary/5 px-3 py-1.5 text-xs font-black text-primary">Pre-approve</Link>
                 </div>
                 <div className="flex-1 space-y-3">
                   {visitors.length === 0 ? <EmptyMiniState text="No recent visitors." /> : visitors.slice(0, 3).map((visitor) => (
-                    <Link key={visitor.id} href="/my-visitors" className="flex items-center justify-between rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm">
+                    <Link key={visitor.id} href="/my-visitors" className="flex items-center justify-between rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm dark:hover:bg-slate-800">
                       <div className="flex min-w-0 items-center gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-100">
                           <User className="h-5 w-5 text-indigo-600" />
@@ -495,14 +495,14 @@ function ResidentDashboard({
                 </div>
               </div>
 
-              <div className="flex flex-col rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+              <div className="flex flex-col rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
                 <div className="mb-5 flex items-center justify-between">
                   <h3 className="text-lg font-black tracking-tight text-text-primary">Discussions</h3>
                   <Link href="/forum" className="text-xs font-black text-text-secondary hover:text-text-primary">View All</Link>
                 </div>
                 <div className="flex-1 space-y-3">
                   {forumThreads.length === 0 ? <EmptyMiniState text="No discussions yet." /> : forumThreads.slice(0, 3).map((thread) => (
-                    <Link key={thread.id} href="/forum" className="block rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm">
+                    <Link key={thread.id} href="/forum" className="block rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm dark:hover:bg-slate-800">
                       <h4 className="line-clamp-1 text-sm font-black text-text-primary">{thread.title}</h4>
                       <div className="mt-2 flex items-center justify-between">
                         <span className="truncate text-xs font-semibold text-text-secondary">{thread.author?.name || "Resident"}</span>
@@ -531,7 +531,7 @@ function ResidentDashboard({
                 ].map((service, index) => {
                   const Icon = service.icon;
                   return (
-                    <Link key={service.href} href={service.href} className={`group relative flex flex-col items-center justify-center gap-4 overflow-hidden border border-border bg-white p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-lg ${index % 2 === 0 ? "rounded-[2rem_2.5rem_2rem_2.5rem]" : "rounded-[2.5rem_2rem_2.5rem_2rem]"}`}>
+                    <Link key={service.href} href={service.href} className={`group relative flex flex-col items-center justify-center gap-4 overflow-hidden border border-border bg-white p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-lg dark:bg-slate-900 ${index % 2 === 0 ? "rounded-[2rem_2.5rem_2rem_2.5rem]" : "rounded-[2.5rem_2rem_2.5rem_2rem]"}`}>
                       <div className={`absolute inset-0 bg-gradient-to-br ${service.bg} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.04]`} />
                       <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${service.bg} shadow-lg ${service.shadow} transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110`}>
                         <Icon className="h-7 w-7 text-white" />
@@ -545,7 +545,7 @@ function ResidentDashboard({
           </div>
 
           <aside className="flex w-full flex-col gap-6 lg:w-1/3 xl:w-[30%]">
-            <div className="relative rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+            <div className="relative rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-lg font-black tracking-tight text-text-primary">Notice Board</h3>
                 <Link href="/notices" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></Link>
@@ -555,7 +555,7 @@ function ResidentDashboard({
                   <div className="space-y-4 border-l-2 border-border pl-4">
                     {notices.slice(0, 4).map((notice, index) => (
                       <div key={notice.id} className="relative">
-                        <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-white ${index === 0 ? "bg-primary" : "bg-slate-300"}`} />
+                        <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-white dark:ring-slate-900 ${index === 0 ? "bg-primary" : "bg-slate-300"}`} />
                         <p className="mb-1 text-[11px] font-black uppercase tracking-wider text-primary">{formatShortDate(notice.createdAt)}</p>
                         <h4 className="line-clamp-1 text-sm font-black text-text-primary">{notice.title}</h4>
                         <p className="mt-1 text-xs font-semibold text-text-secondary">{notice.category}</p>
@@ -564,12 +564,12 @@ function ResidentDashboard({
                   </div>
                 )}
               </div>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5 dark:from-slate-900 dark:via-slate-900">
                 <Link href="/notices" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Notices</Link>
               </div>
             </div>
 
-            <div className="relative rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm lg:p-6">
+            <div className="relative rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-lg font-black tracking-tight text-text-primary">Events</h3>
                 <Link href="/events" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><CalendarCheck className="h-5 w-5 text-text-secondary" /></Link>
@@ -592,16 +592,16 @@ function ResidentDashboard({
                   </div>
                 )}
               </div>
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5 dark:from-slate-900 dark:via-slate-900">
                 <Link href="/events" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Events</Link>
               </div>
             </div>
 
-            <Link href="/parking" className="group relative block h-[220px] overflow-hidden rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white shadow-sm transition-all duration-500 hover:border-emerald-200">
+            <Link href="/parking" className="group relative block h-[220px] overflow-hidden rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white shadow-sm transition-all duration-500 hover:border-emerald-200 dark:bg-slate-900">
               <div className="absolute bottom-0 right-0 z-0 h-44 w-56">
                 <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80" alt="Parking" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#fff_0%,#fff_30%,transparent_100%)]" />
-                <div className="absolute inset-0 bg-[linear-gradient(to_top,#fff_0%,transparent_60%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#fff_0%,#fff_30%,transparent_100%)] dark:bg-[linear-gradient(to_right,#111827_0%,#111827_30%,transparent_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,#fff_0%,transparent_60%)] dark:bg-[linear-gradient(to_top,#111827_0%,transparent_60%)]" />
               </div>
               <div className="absolute inset-0 z-10 flex flex-col justify-between p-6 lg:p-7">
                 <div className="flex items-start justify-between">
@@ -612,7 +612,7 @@ function ResidentDashboard({
                       <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">{parkingSlot ? "Assigned" : "Not assigned"}</span>
                     </div>
                   </div>
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white shadow-sm transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white shadow-sm transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50 dark:bg-slate-800 dark:group-hover:bg-emerald-950">
                     <Car className="h-5 w-5 text-text-secondary transition-colors group-hover:text-emerald-600" />
                   </div>
                 </div>
@@ -675,9 +675,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="-m-4 min-h-full bg-[#fbf7f5] p-4 lg:-m-6 lg:p-8">
+    <div className="-m-4 min-h-full bg-[#fbf7f5] p-4 dark:bg-[#07111f] lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-sm backdrop-blur sm:p-7">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/85 sm:p-7">
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
               <div className="mb-3 flex items-center gap-2">
@@ -692,19 +692,19 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:min-w-[360px] lg:grid-cols-2">
-              <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4">
+              <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4 dark:bg-primary/10">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? "Pending" : "My Dues"}</p>
                 <p className="mt-1 text-xl font-black text-primary">{formatCurrency(dueAmount)}</p>
               </div>
-              <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+              <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/40">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? "Collected" : "Paid"}</p>
                 <p className="mt-1 text-xl font-black text-emerald-700">{formatCurrency(paidAmount)}</p>
               </div>
-              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4">
+              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/60 dark:bg-amber-950/40">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">Visitors</p>
                 <p className="mt-1 text-xl font-black text-amber-700">{loading ? "--" : data?.visitorsToday || 0}</p>
               </div>
-              <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4">
+              <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">Helpdesk</p>
                 <p className="mt-1 text-xl font-black text-blue-700">{loading ? "--" : data?.openComplaints || 0}</p>
               </div>
@@ -731,17 +731,17 @@ export default function DashboardPage() {
         </section>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <Link href={isAdmin ? "/maintenance" : "/my-bills"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md">
+          <Link href={isAdmin ? "/maintenance" : "/my-bills"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <Receipt className="mb-4 h-6 w-6 text-primary" />
             <h3 className="font-black text-text-primary">{isAdmin ? "Raise invoices" : "Pay bills"}</h3>
             <p className="mt-1 text-xs text-text-secondary">Fast access to the most common finance action.</p>
           </Link>
-          <Link href={isAdmin ? "/visitors" : "/my-visitors"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md">
+          <Link href={isAdmin ? "/visitors" : "/my-visitors"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <Shield className="mb-4 h-6 w-6 text-emerald-600" />
             <h3 className="font-black text-text-primary">{isAdmin ? "Gate activity" : "Approve visitors"}</h3>
             <p className="mt-1 text-xs text-text-secondary">Visitor and security flows in one tap.</p>
           </Link>
-          <Link href="/notices" className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md">
+          <Link href="/notices" className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <BellRing className="mb-4 h-6 w-6 text-amber-600" />
             <h3 className="font-black text-text-primary">Latest updates</h3>
             <p className="mt-1 text-xs text-text-secondary">Announcements and important society communication.</p>

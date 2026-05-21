@@ -36,11 +36,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta id="theme-color-meta" name="theme-color" content="#3B82F6" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                try {
+                  var stored = localStorage.getItem('theme');
+                  var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var dark = stored ? stored === 'dark' : systemDark;
+                  document.documentElement.classList.toggle('dark', dark);
+                  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+                  var meta = document.querySelector('meta[name="theme-color"]');
+                  if (meta) meta.setAttribute('content', dark ? '#0B1220' : '#3B82F6');
+                } catch (_) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider />

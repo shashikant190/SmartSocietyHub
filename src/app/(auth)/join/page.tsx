@@ -424,12 +424,14 @@ export default function JoinPage() {
           )}
 
           <div className="mt-4 text-center">
+            {/*
             <p className="text-sm text-text-secondary">
               Chairman?{" "}
               <Link href="/register" className="text-primary font-medium hover:underline">
                 Create a society
               </Link>
             </p>
+            */}
             <p className="text-sm text-text-secondary mt-2">
               Already joined?{" "}
               <Link href="/login" className="text-primary font-medium hover:underline">

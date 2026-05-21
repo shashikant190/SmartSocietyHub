@@ -138,7 +138,7 @@ export default function NotificationCenter() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-[360px] max-h-[480px] bg-white rounded-xl shadow-xl border border-border z-50 overflow-hidden"
+        <div className="absolute right-0 top-full mt-2 w-[360px] max-h-[480px] bg-white rounded-xl shadow-xl border border-border z-50 overflow-hidden dark:bg-slate-900"
           style={{ animation: "slideUp 0.15s ease" }}>
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface/50">
@@ -186,7 +186,7 @@ export default function NotificationCenter() {
                       if (e.key === "Enter" || e.key === " ") handleClick(n);
                     }}
                     className={`w-full text-left px-4 py-3 flex gap-3 hover:bg-surface/80 transition-colors border-b border-border/50 last:border-b-0 ${
-                      !n.isRead ? "bg-blue-50/40" : ""
+                      !n.isRead ? "bg-blue-50/40 dark:bg-blue-500/10" : ""
                     }`}
                   >
                     <div

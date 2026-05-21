@@ -59,7 +59,7 @@ export default function BottomNav({ userRole = "member" }: BottomNavProps) {
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border pb-safe transition-transform duration-300 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pt-1 dark:bg-[#1A1F26]">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border pb-safe transition-transform duration-300 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pt-1 dark:bg-[#0f172a]">
       <div className="flex justify-around items-center h-[60px] px-2 max-w-md mx-auto relative">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);

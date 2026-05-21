@@ -3,6 +3,14 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
+function applyTheme(dark: boolean) {
+  document.documentElement.classList.toggle("dark", dark);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", dark ? "#0B1220" : "#3B82F6");
+}
+
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const [isDark, setIsDark] = useState(false);
@@ -19,26 +27,16 @@ export default function ThemeToggle() {
     const dark = theme === "dark" || (!theme && isSystemDark);
 
     setIsDark(dark);
-
-    if (dark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    applyTheme(dark);
   }, []);
 
   const toggleTheme = () => {
     const next = !isDark;
 
     setIsDark(next);
-
-    if (next) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    localStorage.setItem("theme", next ? "dark" : "light");
+    applyTheme(next);
+    window.dispatchEvent(new CustomEvent("themechange", { detail: { theme: next ? "dark" : "light" } }));
   };
 
   // Prevent hydration mismatch
@@ -52,7 +50,9 @@ export default function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={toggleTheme}
+      aria-pressed={isDark}
       className="p-2 text-text-secondary hover:text-text-primary hover:bg-surface rounded-full transition-colors relative"
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
