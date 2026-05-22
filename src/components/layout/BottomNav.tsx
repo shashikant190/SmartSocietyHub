@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
+import {
   LayoutDashboard, 
   Receipt, 
   AlertTriangle, 
@@ -12,6 +12,7 @@ import {
   Shield,
   Package,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 
 interface BottomNavProps {
@@ -20,6 +21,7 @@ interface BottomNavProps {
 
 export default function BottomNav({ userRole = "member" }: BottomNavProps) {
   const pathname = usePathname();
+  const { t } = useI18n();
 
   const isWatchman = userRole === "watchman" || userRole === "guard";
 
@@ -73,7 +75,7 @@ export default function BottomNav({ userRole = "member" }: BottomNavProps) {
             >
               <item.icon className={`w-5 h-5 transition-all ${isActive ? "stroke-[2.5px]" : "stroke-[1.5px]"}`} />
               <span className={`text-[10px] leading-none transition-all ${isActive ? "font-bold" : "font-medium"}`}>
-                {item.label}
+                {t(item.label)}
               </span>
             </Link>
           );

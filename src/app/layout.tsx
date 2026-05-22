@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ToastProvider from "@/components/ui/Toast";
 import Script from "next/script";
+import { I18nProvider } from "@/lib/i18n";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -62,7 +63,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased`}>
         <ToastProvider />
-        {children}
+        <I18nProvider>{children}</I18nProvider>
         <Script id="sw-register" strategy="lazyOnload">{`
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').catch(()=>{});

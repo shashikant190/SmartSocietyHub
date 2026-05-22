@@ -45,6 +45,7 @@ import {
 import { useLiveData } from "@/lib/use-live-data";
 import { useUser } from "@/lib/user-context";
 import { formatCurrency } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
 
 interface DashboardData {
   totalCollected: number;
@@ -204,6 +205,7 @@ function greeting() {
 
 function CategoryCard({ category, expanded, count, onClick }: { category: Category; expanded: boolean; count: number; onClick: () => void }) {
   const Icon = category.icon;
+  const { t } = useI18n();
   return (
     <motion.button
       layout
@@ -220,19 +222,19 @@ function CategoryCard({ category, expanded, count, onClick }: { category: Catego
       <div className="relative z-10 flex h-full flex-col justify-between">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/75">{category.subtitle}</p>
-            <h2 className="mt-1.5 text-2xl font-black tracking-tight">{category.title}</h2>
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/75">{t(category.subtitle)}</p>
+            <h2 className="mt-1.5 text-2xl font-black tracking-tight">{t(category.title)}</h2>
           </div>
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
             <Icon className="h-5 w-5" />
           </div>
         </div>
         <div>
-          <p className="line-clamp-2 max-w-md text-sm leading-5 text-white/85">{category.description}</p>
+          <p className="line-clamp-2 max-w-md text-sm leading-5 text-white/85">{t(category.description)}</p>
           <div className="mt-3 flex items-center justify-between">
-            <span className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold">{count} modules</span>
+            <span className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold">{count} {t("modules")}</span>
             <span className="flex items-center gap-1 text-xs font-black">
-              {expanded ? "Hide" : "Open"} <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
+              {expanded ? t("Hide") : t("Open")} <ChevronDown className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`} />
             </span>
           </div>
         </div>
@@ -244,6 +246,7 @@ function CategoryCard({ category, expanded, count, onClick }: { category: Catego
 
 function ModuleCard({ module }: { module: ModuleItem }) {
   const Icon = module.icon;
+  const { t } = useI18n();
   return (
     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}>
       <Link href={module.href} className="group flex min-h-[104px] flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_4px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/20 dark:hover:border-primary/40">
@@ -254,8 +257,8 @@ function ModuleCard({ module }: { module: ModuleItem }) {
           <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
         </div>
         <div className="min-w-0">
-          <h3 className="truncate text-sm font-black text-slate-950 dark:text-slate-50">{module.label}</h3>
-          <p className="mt-1 line-clamp-1 text-xs font-medium text-slate-500">{module.note}</p>
+          <h3 className="truncate text-sm font-black text-slate-950 dark:text-slate-50">{t(module.label)}</h3>
+          <p className="mt-1 line-clamp-1 text-xs font-medium text-slate-500">{t(module.note)}</p>
         </div>
       </Link>
     </motion.div>
@@ -263,6 +266,7 @@ function ModuleCard({ module }: { module: ModuleItem }) {
 }
 
 function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin: boolean }) {
+  const { t } = useI18n();
   const quickActions = {
     operations: [
       { label: isAdmin ? "Gate Activity" : "Approve Visitors", href: isAdmin ? "/visitors" : "/my-visitors", icon: Shield },
@@ -306,12 +310,12 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
 
         <div className="mb-5 flex items-start justify-between gap-4">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-primary">Workspace</p>
-            <h2 className="mt-1 text-xl font-black text-slate-950 dark:text-slate-50">{category.title}</h2>
-            <p className="mt-1 text-xs font-medium text-slate-500">{category.description}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-primary">{t("Workspace")}</p>
+            <h2 className="mt-1 text-xl font-black text-slate-950 dark:text-slate-50">{t(category.title)}</h2>
+            <p className="mt-1 text-xs font-medium text-slate-500">{t(category.description)}</p>
           </div>
           <span className="hidden rounded-full bg-slate-50 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:bg-slate-800 dark:text-slate-300 sm:inline">
-            No crowded menus
+            {t("No crowded menus")}
           </span>
         </div>
 
@@ -321,7 +325,7 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
 
         {quickActions.length > 0 && (
           <div className="mt-5">
-            <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-500">Quick Actions</p>
+            <p className="mb-3 text-[10px] font-black uppercase tracking-widest text-slate-500">{t("Quick Actions")}</p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {quickActions.map((action) => {
                 const Icon = action.icon;
@@ -332,7 +336,7 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
                     className="flex min-h-[72px] flex-col justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-black text-slate-950 shadow-[0_1px_4px_rgba(15,23,42,0.05)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:text-primary hover:shadow-[0_8px_20px_rgba(15,23,42,0.07)] dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50 dark:shadow-black/20 dark:hover:border-primary/40"
                   >
                     <Icon className="h-4 w-4 text-primary" />
-                    <span>{action.label}</span>
+                    <span>{t(action.label)}</span>
                   </Link>
                 );
               })}
@@ -343,8 +347,8 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
         <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/70">
           <BellRing className="h-4 w-4 shrink-0 text-amber-600" />
           <div>
-            <p className="text-xs font-black text-slate-950 dark:text-slate-50">Recent activity</p>
-            <p className="mt-0.5 text-xs font-medium text-slate-500">Latest updates from this area appear in notifications and module pages.</p>
+            <p className="text-xs font-black text-slate-950 dark:text-slate-50">{t("Recent activity")}</p>
+            <p className="mt-0.5 text-xs font-medium text-slate-500">{t("Latest updates from this area appear in notifications and module pages.")}</p>
           </div>
         </div>
       </div>
@@ -352,14 +356,16 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
   );
 }
 
-function formatShortDate(date?: string | null) {
-  if (!date) return "No date";
-  return new Date(date).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+function formatShortDate(date: string | null | undefined, language: string) {
+  if (!date) return "";
+  const locale = language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+  return new Date(date).toLocaleDateString(locale, { day: "numeric", month: "short" });
 }
 
-function formatShortTime(date?: string | null) {
-  if (!date) return "Time not set";
-  return new Date(date).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+function formatShortTime(date: string | null | undefined, language: string) {
+  if (!date) return "";
+  const locale = language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN";
+  return new Date(date).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 }
 
 function PriorityCard({
@@ -415,6 +421,7 @@ function ResidentDashboard({
   myBills: MyBillsData | null;
   bootstrap: ResidentBootstrapData | null;
 }) {
+  const { language, t } = useI18n();
   const notices = bootstrap?.notices || [];
   const visitors = bootstrap?.visitors || [];
   const packages = bootstrap?.packages || [];
@@ -434,21 +441,21 @@ function ResidentDashboard({
               <div className="absolute inset-0">
                 <img
                   src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80"
-                  alt="Society building"
+                  alt={t("Society building")}
                   className="h-full w-full object-cover opacity-60"
                 />
               </div>
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,3,40,0.96)_0%,rgba(0,69,142,0.42)_100%)]" />
               <div className="relative z-10 max-w-xl">
                 <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-white drop-shadow-md lg:text-5xl">
-                  {greeting()}, <br className="hidden lg:block" />
-                  <span className="text-emerald-400">{user?.name?.split(" ")[0] || "Resident"}</span>
+                  {t(greeting().charAt(0).toUpperCase() + greeting().slice(1))}, <br className="hidden lg:block" />
+                  <span className="text-emerald-400">{user?.name?.split(" ")[0] || t("Residents")}</span>
                 </h1>
                 <p className="mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/75 lg:text-base">
                   <Building2 className="h-4 w-4 text-white/50" />
-                  <span>{user?.societyName || "Your society"}</span>
+                  <span>{user?.societyName || t("Your society")}</span>
                   {user?.flatNumber && <span className="h-1.5 w-1.5 rounded-full bg-white/25" />}
-                  {user?.flatNumber && <span className="font-bold text-white">Unit {user.flatNumber}</span>}
+                  {user?.flatNumber && <span className="font-bold text-white">{t("Unit")} {user.flatNumber}</span>}
                 </p>
               </div>
               <div className="relative z-10 hidden shrink-0 pr-2 sm:block lg:pr-6">
@@ -458,27 +465,27 @@ function ResidentDashboard({
                   </div>
                   <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-white/95 px-4 py-1.5 shadow-sm backdrop-blur-sm dark:bg-slate-900/95">
                     <UserCheck className="h-4 w-4 text-emerald-600" />
-                    <span className="text-[11px] font-black uppercase tracking-widest text-text-primary">{user?.role === "tenant" ? "Tenant" : "Resident"}</span>
+                    <span className="text-[11px] font-black uppercase tracking-widest text-text-primary">{user?.role === "tenant" ? t("Tenant") : t("Residents")}</span>
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="grid grid-cols-2 gap-3 lg:gap-4 xl:grid-cols-4">
-              <PriorityCard href="/my-bills" label="My Bills" value={`Due: ${formatCurrency(myBills?.stats?.totalPending || 0)}`} icon={CreditCard} gradient="from-emerald-500 to-emerald-700" />
-              <PriorityCard href="/staff" label="My Staff" value={`Scheduled: ${staff.length}`} icon={Wrench} gradient="from-blue-500 to-blue-700" reverse />
-              <PriorityCard href="/packages" label="Deliveries" value={`Pending: ${pendingPackages}`} icon={Package} gradient="from-purple-500 to-purple-700" />
-              <PriorityCard href="/emergency" label="Emergency" value="Alert security" icon={Phone} gradient="from-rose-500 to-rose-700" reverse />
+              <PriorityCard href="/my-bills" label={t("My Bills")} value={`${t("Pending")}: ${formatCurrency(myBills?.stats?.totalPending || 0)}`} icon={CreditCard} gradient="from-emerald-500 to-emerald-700" />
+              <PriorityCard href="/staff" label={t("Staff & Daily Help")} value={`${t("Scheduled")}: ${staff.length}`} icon={Wrench} gradient="from-blue-500 to-blue-700" reverse />
+              <PriorityCard href="/packages" label={t("Parcel Desk")} value={`${t("Pending")}: ${pendingPackages}`} icon={Package} gradient="from-purple-500 to-purple-700" />
+              <PriorityCard href="/emergency" label={t("SOS & Safety")} value={t("Alert security")} icon={Phone} gradient="from-rose-500 to-rose-700" reverse />
             </section>
 
             <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
               <div className="flex flex-col rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
                 <div className="mb-5 flex items-center justify-between">
-                  <h3 className="text-lg font-black tracking-tight text-text-primary">Visitors</h3>
-                  <Link href="/my-visitors" className="rounded-full bg-primary/5 px-3 py-1.5 text-xs font-black text-primary">Pre-approve</Link>
+                  <h3 className="text-lg font-black tracking-tight text-text-primary">{t("Visitors")}</h3>
+                  <Link href="/my-visitors" className="rounded-full bg-primary/5 px-3 py-1.5 text-xs font-black text-primary">{t("Approve visitors")}</Link>
                 </div>
                 <div className="flex-1 space-y-3">
-                  {visitors.length === 0 ? <EmptyMiniState text="No recent visitors." /> : visitors.slice(0, 3).map((visitor) => (
+                  {visitors.length === 0 ? <EmptyMiniState text={t("No recent visitors.")} /> : visitors.slice(0, 3).map((visitor) => (
                     <Link key={visitor.id} href="/my-visitors" className="flex items-center justify-between rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm dark:hover:bg-slate-800">
                       <div className="flex min-w-0 items-center gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-100">
@@ -486,10 +493,10 @@ function ResidentDashboard({
                         </div>
                         <div className="min-w-0">
                           <p className="truncate text-sm font-black text-text-primary">{visitor.visitorName}</p>
-                          <p className="truncate text-xs font-semibold text-text-secondary">{visitor.purpose} · {formatShortTime(visitor.entryTime || visitor.expectedAt)}</p>
+                          <p className="truncate text-xs font-semibold text-text-secondary">{visitor.purpose} · {formatShortTime(visitor.entryTime || visitor.expectedAt, language)}</p>
                         </div>
                       </div>
-                      <span className="ml-2 shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-800">{visitor.status.replace("_", " ")}</span>
+                      <span className="ml-2 shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-amber-800">{t(visitor.status.replace("_", " "))}</span>
                     </Link>
                   ))}
                 </div>
@@ -497,15 +504,15 @@ function ResidentDashboard({
 
               <div className="flex flex-col rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
                 <div className="mb-5 flex items-center justify-between">
-                  <h3 className="text-lg font-black tracking-tight text-text-primary">Discussions</h3>
-                  <Link href="/forum" className="text-xs font-black text-text-secondary hover:text-text-primary">View All</Link>
+                  <h3 className="text-lg font-black tracking-tight text-text-primary">{t("Discussion Forum")}</h3>
+                  <Link href="/forum" className="text-xs font-black text-text-secondary hover:text-text-primary">{t("View All")}</Link>
                 </div>
                 <div className="flex-1 space-y-3">
-                  {forumThreads.length === 0 ? <EmptyMiniState text="No discussions yet." /> : forumThreads.slice(0, 3).map((thread) => (
+                  {forumThreads.length === 0 ? <EmptyMiniState text={t("No discussions yet.")} /> : forumThreads.slice(0, 3).map((thread) => (
                     <Link key={thread.id} href="/forum" className="block rounded-2xl border border-border bg-surface p-3.5 transition-all hover:bg-white hover:shadow-sm dark:hover:bg-slate-800">
                       <h4 className="line-clamp-1 text-sm font-black text-text-primary">{thread.title}</h4>
                       <div className="mt-2 flex items-center justify-between">
-                        <span className="truncate text-xs font-semibold text-text-secondary">{thread.author?.name || "Resident"}</span>
+                        <span className="truncate text-xs font-semibold text-text-secondary">{thread.author?.name || t("Resident")}</span>
                         <span className="flex items-center gap-1.5 text-xs font-black text-text-secondary"><MessageSquare className="h-3.5 w-3.5" />{thread._count?.replies || 0}</span>
                       </div>
                     </Link>
@@ -516,7 +523,7 @@ function ResidentDashboard({
 
             <section>
               <div className="mb-4 flex items-center justify-between px-1">
-                <h3 className="text-xl font-black tracking-tight text-text-primary">Community Quick Links</h3>
+                <h3 className="text-xl font-black tracking-tight text-text-primary">{t("Community Quick Links")}</h3>
               </div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
                 {[
@@ -536,7 +543,7 @@ function ResidentDashboard({
                       <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${service.bg} shadow-lg ${service.shadow} transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110`}>
                         <Icon className="h-7 w-7 text-white" />
                       </div>
-                      <span className="relative z-10 text-sm font-black text-text-primary">{service.label}</span>
+                      <span className="relative z-10 text-sm font-black text-text-primary">{t(service.label)}</span>
                     </Link>
                   );
                 })}
@@ -547,16 +554,16 @@ function ResidentDashboard({
           <aside className="flex w-full flex-col gap-6 lg:w-1/3 xl:w-[30%]">
             <div className="relative rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-black tracking-tight text-text-primary">Notice Board</h3>
+                <h3 className="text-lg font-black tracking-tight text-text-primary">{t("Announcements")}</h3>
                 <Link href="/notices" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></Link>
               </div>
               <div className="relative h-[170px] overflow-hidden">
-                {notices.length === 0 ? <EmptyMiniState text="No notices posted yet." /> : (
+                {notices.length === 0 ? <EmptyMiniState text={t("No notices posted yet.")} /> : (
                   <div className="space-y-4 border-l-2 border-border pl-4">
                     {notices.slice(0, 4).map((notice, index) => (
                       <div key={notice.id} className="relative">
                         <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-white dark:ring-slate-900 ${index === 0 ? "bg-primary" : "bg-slate-300"}`} />
-                        <p className="mb-1 text-[11px] font-black uppercase tracking-wider text-primary">{formatShortDate(notice.createdAt)}</p>
+                        <p className="mb-1 text-[11px] font-black uppercase tracking-wider text-primary">{formatShortDate(notice.createdAt, language)}</p>
                         <h4 className="line-clamp-1 text-sm font-black text-text-primary">{notice.title}</h4>
                         <p className="mt-1 text-xs font-semibold text-text-secondary">{notice.category}</p>
                       </div>
@@ -565,27 +572,27 @@ function ResidentDashboard({
                 )}
               </div>
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5 dark:from-slate-900 dark:via-slate-900">
-                <Link href="/notices" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Notices</Link>
+                <Link href="/notices" className="pointer-events-auto text-sm font-black text-primary hover:underline">{t("View All Notices")}</Link>
               </div>
             </div>
 
             <div className="relative rounded-[2.5rem_2rem_2.5rem_2rem] border border-border bg-white p-5 shadow-sm dark:bg-slate-900 lg:p-6">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-black tracking-tight text-text-primary">Events</h3>
+                <h3 className="text-lg font-black tracking-tight text-text-primary">{t("Events & Calendar")}</h3>
                 <Link href="/events" className="flex h-8 w-8 items-center justify-center rounded-full bg-surface"><CalendarCheck className="h-5 w-5 text-text-secondary" /></Link>
               </div>
               <div className="relative h-[170px] overflow-hidden">
-                {events.length === 0 ? <EmptyMiniState text="No upcoming events." /> : (
+                {events.length === 0 ? <EmptyMiniState text={t("No upcoming events.")} /> : (
                   <div className="space-y-1">
                     {events.slice(0, 4).map((event) => (
                       <Link key={event.id} href="/events" className="group flex items-center gap-3 rounded-xl border border-transparent p-2 transition-colors hover:border-border hover:bg-surface">
                         <div className="flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl border border-primary/20 bg-primary/10">
-                          <span className="text-[10px] font-black uppercase leading-tight text-primary">{new Date(event.startDate).toLocaleDateString("en-IN", { month: "short" })}</span>
+                          <span className="text-[10px] font-black uppercase leading-tight text-primary">{new Date(event.startDate).toLocaleDateString(language === "hi" ? "hi-IN" : language === "mr" ? "mr-IN" : "en-IN", { month: "short" })}</span>
                           <span className="text-lg font-black leading-none text-primary">{new Date(event.startDate).getDate()}</span>
                         </div>
                         <div className="min-w-0">
                           <h4 className="truncate text-sm font-black text-text-primary">{event.title}</h4>
-                          <p className="mt-0.5 truncate text-xs font-semibold text-text-secondary">{event.venue || "Society"} · {formatShortTime(event.startDate)}</p>
+                          <p className="mt-0.5 truncate text-xs font-semibold text-text-secondary">{event.venue || t("Society")} · {formatShortTime(event.startDate, language)}</p>
                         </div>
                       </Link>
                     ))}
@@ -593,23 +600,23 @@ function ResidentDashboard({
                 )}
               </div>
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-24 items-end justify-center rounded-b-[2rem] bg-gradient-to-t from-white via-white to-transparent pb-5 dark:from-slate-900 dark:via-slate-900">
-                <Link href="/events" className="pointer-events-auto text-sm font-black text-primary hover:underline">View All Events</Link>
+                <Link href="/events" className="pointer-events-auto text-sm font-black text-primary hover:underline">{t("View All Events")}</Link>
               </div>
             </div>
 
             <Link href="/parking" className="group relative block h-[220px] overflow-hidden rounded-[2rem_2.5rem_2rem_2.5rem] border border-border bg-white shadow-sm transition-all duration-500 hover:border-emerald-200 dark:bg-slate-900">
               <div className="absolute bottom-0 right-0 z-0 h-44 w-56">
-                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80" alt="Parking" className="h-full w-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=600&q=80" alt={t("Parking")} className="h-full w-full object-cover" />
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#fff_0%,#fff_30%,transparent_100%)] dark:bg-[linear-gradient(to_right,#111827_0%,#111827_30%,transparent_100%)]" />
                 <div className="absolute inset-0 bg-[linear-gradient(to_top,#fff_0%,transparent_60%)] dark:bg-[linear-gradient(to_top,#111827_0%,transparent_60%)]" />
               </div>
               <div className="absolute inset-0 z-10 flex flex-col justify-between p-6 lg:p-7">
                 <div className="flex items-start justify-between">
                   <div className="flex flex-col items-start gap-2">
-                    <h3 className="text-xl font-black tracking-tight text-text-primary">My Parking</h3>
+                    <h3 className="text-xl font-black tracking-tight text-text-primary">{t("Parking")}</h3>
                     <div className="flex items-center gap-1.5 rounded-full border border-emerald-200/80 bg-emerald-50 px-3 py-1.5 shadow-sm">
                       <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">{parkingSlot ? "Assigned" : "Not assigned"}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700">{parkingSlot ? t("Assigned") : t("Not assigned")}</span>
                     </div>
                   </div>
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-white shadow-sm transition-colors group-hover:border-emerald-200 group-hover:bg-emerald-50 dark:bg-slate-800 dark:group-hover:bg-emerald-950">
@@ -617,10 +624,10 @@ function ResidentDashboard({
                   </div>
                 </div>
                 <div>
-                  <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-text-secondary">Assigned Slot</p>
+                  <p className="mb-1 text-[10px] font-black uppercase tracking-widest text-text-secondary">{t("Assigned Slot")}</p>
                   <div className="flex items-end gap-3">
                     <h3 className="font-mono text-4xl font-black tracking-tight text-text-primary lg:text-5xl">{parkingSlot?.slotNumber || "--"}</h3>
-                    <span className="pb-1 text-sm font-black text-text-secondary lg:pb-1.5">{parkingSlot?.level || parkingSlot?.wing || "Parking"}</span>
+                    <span className="pb-1 text-sm font-black text-text-secondary lg:pb-1.5">{parkingSlot?.level || parkingSlot?.wing || t("Parking")}</span>
                   </div>
                 </div>
               </div>
@@ -636,6 +643,7 @@ export default function DashboardPage() {
   const { user, loaded } = useUser();
   const [expanded, setExpanded] = useState("");
   const isAdmin = admin.includes(user?.role || "");
+  const { t } = useI18n();
 
   const { data, loading, isStale } = useLiveData<DashboardData>({ url: "/api/dashboard", interval: 60_000, enabled: true });
   const { data: myBills } = useLiveData<MyBillsData>({
@@ -682,30 +690,30 @@ export default function DashboardPage() {
             <div>
               <div className="mb-3 flex items-center gap-2">
                 <span className="inline-flex rounded-full bg-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary">
-                  {roleLabels[user?.role || ""] || user?.role || "User"}
+                  {t(roleLabels[user?.role || ""] || user?.role || "User")}
                 </span>
                 {isStale && <RefreshCw className="h-4 w-4 animate-spin text-primary" />}
               </div>
-              <h1 className="text-3xl font-black tracking-tight text-text-primary sm:text-5xl">Manage Society</h1>
+              <h1 className="text-3xl font-black tracking-tight text-text-primary sm:text-5xl">{t("Manage Society")}</h1>
               <p className="mt-2 text-sm text-text-secondary">
-                {greeting()}, {user?.name || "User"} · {user?.societyName || "Your society"} {user?.flatNumber ? `· Flat ${user.flatNumber}` : ""}
+                {t(greeting().charAt(0).toUpperCase() + greeting().slice(1))}, {user?.name || t("User")} · {user?.societyName || t("Your society")} {user?.flatNumber ? `· ${t("Flat")} ${user.flatNumber}` : ""}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:min-w-[360px] lg:grid-cols-2">
               <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4 dark:bg-primary/10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? "Pending" : "My Dues"}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? t("Pending") : t("My Dues")}</p>
                 <p className="mt-1 text-xl font-black text-primary">{formatCurrency(dueAmount)}</p>
               </div>
               <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/40">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? "Collected" : "Paid"}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? t("Collected") : t("Paid")}</p>
                 <p className="mt-1 text-xl font-black text-emerald-700">{formatCurrency(paidAmount)}</p>
               </div>
               <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/60 dark:bg-amber-950/40">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">Visitors</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{t("Visitors")}</p>
                 <p className="mt-1 text-xl font-black text-amber-700">{loading ? "--" : data?.visitorsToday || 0}</p>
               </div>
               <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
-                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">Helpdesk</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{t("Helpdesk")}</p>
                 <p className="mt-1 text-xl font-black text-blue-700">{loading ? "--" : data?.openComplaints || 0}</p>
               </div>
             </div>
@@ -733,18 +741,18 @@ export default function DashboardPage() {
         <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <Link href={isAdmin ? "/maintenance" : "/my-bills"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <Receipt className="mb-4 h-6 w-6 text-primary" />
-            <h3 className="font-black text-text-primary">{isAdmin ? "Raise invoices" : "Pay bills"}</h3>
-            <p className="mt-1 text-xs text-text-secondary">Fast access to the most common finance action.</p>
+            <h3 className="font-black text-text-primary">{isAdmin ? t("Raise invoices") : t("Pay bills")}</h3>
+            <p className="mt-1 text-xs text-text-secondary">{t("Fast access to the most common finance action.")}</p>
           </Link>
           <Link href={isAdmin ? "/visitors" : "/my-visitors"} className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <Shield className="mb-4 h-6 w-6 text-emerald-600" />
-            <h3 className="font-black text-text-primary">{isAdmin ? "Gate activity" : "Approve visitors"}</h3>
-            <p className="mt-1 text-xs text-text-secondary">Visitor and security flows in one tap.</p>
+            <h3 className="font-black text-text-primary">{isAdmin ? t("Gate activity") : t("Approve visitors")}</h3>
+            <p className="mt-1 text-xs text-text-secondary">{t("Visitor and security flows in one tap.")}</p>
           </Link>
           <Link href="/notices" className="rounded-[1.75rem] border border-border bg-white p-5 shadow-sm transition-all hover:shadow-md dark:bg-slate-900">
             <BellRing className="mb-4 h-6 w-6 text-amber-600" />
-            <h3 className="font-black text-text-primary">Latest updates</h3>
-            <p className="mt-1 text-xs text-text-secondary">Announcements and important society communication.</p>
+            <h3 className="font-black text-text-primary">{t("Latest updates")}</h3>
+            <p className="mt-1 text-xs text-text-secondary">{t("Announcements and important society communication.")}</p>
           </Link>
         </section>
       </div>

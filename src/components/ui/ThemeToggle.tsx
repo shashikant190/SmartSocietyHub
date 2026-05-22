@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 function applyTheme(dark: boolean) {
   document.documentElement.classList.toggle("dark", dark);
@@ -12,6 +13,7 @@ function applyTheme(dark: boolean) {
 }
 
 export default function ThemeToggle() {
+  const { t } = useI18n();
   const [mounted, setMounted] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
@@ -54,7 +56,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-pressed={isDark}
       className="p-2 text-text-secondary hover:text-text-primary hover:bg-surface rounded-full transition-colors relative"
-      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      title={isDark ? t("Switch to light mode") : t("Switch to dark mode")}
     >
       {isDark ? (
         <Sun className="w-4.5 h-4.5" />

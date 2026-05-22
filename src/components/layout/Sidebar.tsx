@@ -43,6 +43,7 @@ import {
   PanelLeftClose,
 } from "lucide-react";
 import { useState } from "react";
+import { useI18n } from "@/lib/i18n";
 
 interface NavItem {
   href: string;
@@ -143,6 +144,7 @@ export default function Sidebar({
   const router = useRouter();
   const [isCompact, setIsCompact] = useState(false);
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+  const { t } = useI18n();
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -197,7 +199,7 @@ export default function Sidebar({
               type="button"
               onClick={() => setIsCompact((current) => !current)}
               className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white transition-colors hover:bg-white/20 lg:flex"
-              title={isCompact ? "Expand sidebar" : "Compact sidebar"}
+              title={isCompact ? t("Expand sidebar") : t("Compact sidebar")}
             >
               <Search className="h-4 w-4" />
             </button>
@@ -206,7 +208,7 @@ export default function Sidebar({
                 type="button"
                 onClick={onHide}
                 className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/12 text-white transition-colors hover:bg-white/20 lg:flex"
-                title="Hide sidebar"
+                title={t("Hide sidebar")}
               >
                 <PanelLeftClose className="h-4 w-4" />
               </button>
@@ -230,7 +232,7 @@ export default function Sidebar({
                     onClick={() => toggleSection(section.title)}
                     className="flex w-full items-center justify-between px-2 pb-2 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400"
                   >
-                    <span>{section.title}</span>
+                    <span>{t(section.title)}</span>
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${collapsedSections[section.title] ? "-rotate-90" : ""}`} />
                   </button>
                 )}
@@ -242,7 +244,7 @@ export default function Sidebar({
                       <Link
                         key={item.href}
                         href={item.href}
-                        title={item.label}
+                        title={t(item.label)}
                         className={`group flex items-center gap-3 rounded-xl font-bold transition-all ${
                           isCompact
                             ? `h-12 w-12 justify-center ${isActive ? "bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-500/15 dark:text-blue-200" : "text-slate-500 hover:bg-slate-50 hover:text-blue-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-blue-200"}`
@@ -251,7 +253,7 @@ export default function Sidebar({
                         onClick={onClose}
                       >
                         <Icon className={`${isCompact ? "h-5 w-5" : "h-[18px] w-[18px]"} shrink-0`} />
-                        {!isCompact && <span className="truncate">{item.label}</span>}
+                        {!isCompact && <span className="truncate">{t(item.label)}</span>}
                       </Link>
                     );
                   })}
@@ -267,13 +269,13 @@ export default function Sidebar({
           {!isCompact && (
             <div className="flex items-center gap-2 px-3 py-2 mb-2">
               <span className="text-[10px] uppercase font-black text-slate-500 tracking-wider dark:text-slate-400">
-                {userRole}
+                {t(userRole.charAt(0).toUpperCase() + userRole.slice(1))}
               </span>
             </div>
           )}
           <button
             onClick={handleLogout}
-            title="Sign Out"
+            title={t("Sign Out")}
             className={`flex items-center gap-3 bg-rose-600 font-black text-white shadow-sm transition-all hover:bg-rose-700 ${
               isCompact
                 ? "h-12 w-12 justify-center rounded-2xl"
@@ -281,7 +283,7 @@ export default function Sidebar({
             }`}
           >
             <LogOut className="h-[18px] w-[18px]" />
-            {!isCompact && "Sign Out"}
+            {!isCompact && t("Sign Out")}
           </button>
         </div>
       </aside>

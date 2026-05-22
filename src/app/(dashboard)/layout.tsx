@@ -9,11 +9,13 @@ import MobileRuntime from "@/components/mobile/MobileRuntime";
 import { usePushNotifications } from "@/lib/use-push";
 import { UserProvider, useUser } from "@/lib/user-context";
 import { PanelLeftOpen } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const { user } = useUser();
+  const { t } = useI18n();
 
   // Auto-subscribe to push notifications
   usePushNotifications();
@@ -59,8 +61,8 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
           type="button"
           onClick={showSidebar}
           className="fixed left-4 top-1/2 z-40 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-2xl border border-blue-100 bg-white/95 text-blue-700 shadow-lg shadow-blue-950/10 backdrop-blur transition-all hover:left-5 hover:bg-blue-50 lg:flex"
-          title="Show sidebar"
-          aria-label="Show sidebar"
+          title={t("Show sidebar")}
+          aria-label={t("Show sidebar")}
         >
           <PanelLeftOpen className="h-5 w-5" />
         </button>

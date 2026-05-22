@@ -5,7 +5,9 @@ import { Menu, LogOut, Settings, User, Shield, ChevronDown, Copy } from "lucide-
 import { useRouter } from "next/navigation";
 import NotificationCenter from "@/components/ui/NotificationCenter";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import LanguageSelector from "@/components/ui/LanguageSelector";
 import toast from "react-hot-toast";
+import { useI18n } from "@/lib/i18n";
 
 interface HeaderProps {
   userName?: string;
@@ -49,6 +51,7 @@ export default function Header({
   const [showProfile, setShowProfile] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { t } = useI18n();
 
   // Close on outside click
   useEffect(() => {
@@ -95,7 +98,7 @@ export default function Header({
           </button>
           <div className="hidden sm:block">
             <h1 className="text-sm font-medium text-text-secondary">
-              Society Manager
+              {t("Society Manager")}
             </h1>
           </div>
         </div>
@@ -106,10 +109,10 @@ export default function Header({
               type="button"
               onClick={copyJoinCode}
               className="hidden md:flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-primary hover:bg-primary/10 transition-colors"
-              title="Copy society join code"
+              title={t("Copy society join code")}
             >
               <span className="text-[10px] font-bold uppercase tracking-wider text-primary/70">
-                Join Code
+                {t("Join Code")}
               </span>
               <span className="font-mono text-sm font-black tracking-widest">
                 {joinCode}
@@ -117,6 +120,7 @@ export default function Header({
               <Copy className="w-3.5 h-3.5" />
             </button>
           )}
+          <LanguageSelector />
           <ThemeToggle />
           <NotificationCenter />
 
@@ -131,7 +135,7 @@ export default function Header({
               </div>
               <div className="hidden sm:block text-left">
                 <p className="text-sm font-semibold text-text-primary leading-tight">{userName}</p>
-                <p className="text-[10px] text-text-tertiary capitalize">{roleLabels[userRole] || userRole}</p>
+                <p className="text-[10px] text-text-tertiary capitalize">{t(roleLabels[userRole] || userRole)}</p>
               </div>
               <ChevronDown className={`w-3.5 h-3.5 text-text-tertiary hidden sm:block transition-transform ${showProfile ? "rotate-180" : ""}`} />
             </button>
@@ -149,7 +153,7 @@ export default function Header({
                       <p className="text-[10px] text-text-tertiary truncate">{userEmail}</p>
                       <div className="flex items-center gap-1 mt-1">
                         <Shield className={`w-3 h-3 ${roleBadgeColors[userRole] || "text-primary"}`} />
-                        <span className={`text-[9px] font-bold uppercase ${roleBadgeColors[userRole] || "text-primary"}`}>{roleLabels[userRole] || userRole}</span>
+                        <span className={`text-[9px] font-bold uppercase ${roleBadgeColors[userRole] || "text-primary"}`}>{t(roleLabels[userRole] || userRole)}</span>
                       </div>
                     </div>
                   </div>
@@ -161,14 +165,14 @@ export default function Header({
                     onClick={() => { setShowProfile(false); router.push("/settings"); }}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-primary hover:bg-surface transition-colors text-left"
                   >
-                    <User className="w-4 h-4 text-text-tertiary" /> My Profile
+                    <User className="w-4 h-4 text-text-tertiary" /> {t("My Profile")}
                   </button>
                   {["chairman", "secretary", "treasurer"].includes(userRole) && (
                     <button
                       onClick={() => { setShowProfile(false); router.push("/settings"); }}
                       className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-primary hover:bg-surface transition-colors text-left"
                     >
-                      <Settings className="w-4 h-4 text-text-tertiary" /> Society Settings
+                      <Settings className="w-4 h-4 text-text-tertiary" /> {t("Society Settings")}
                     </button>
                   )}
                   <div className="my-1.5 border-t border-border/30" />
@@ -176,7 +180,7 @@ export default function Header({
                     onClick={handleLogout}
                     className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors text-left"
                   >
-                    <LogOut className="w-4 h-4" /> Sign Out
+                    <LogOut className="w-4 h-4" /> {t("Sign Out")}
                   </button>
                 </div>
               </div>
