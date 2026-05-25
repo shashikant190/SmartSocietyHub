@@ -90,7 +90,7 @@ const navSections: NavSection[] = [
     items: [
       { href: "/notices", label: "Announcements", icon: Megaphone, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
       { href: "/complaints", label: "Helpdesk", icon: AlertTriangle, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
-      { href: "/directory", label: "Resident Directory", icon: BookOpen, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
+      { href: "/directory", label: "Resident Directory", icon: BookOpen, roles: ["chairman", "secretary", "treasurer"] },
       { href: "/forum", label: "Discussion Forum", icon: MessageSquare, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
       { href: "/events", label: "Events & Calendar", icon: CalendarCheck, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
       { href: "/amenities", label: "Amenity Booking", icon: Building2, roles: ["chairman", "secretary", "treasurer", "member", "tenant"] },
