@@ -10,7 +10,7 @@ export const LANGUAGE_OPTIONS: Array<{ code: AppLanguage; label: string; shortLa
   { code: "mr", label: "मराठी", shortLabel: "म" },
 ];
 
-const dictionary: Record<AppLanguage, Record<string, string>> = {
+export const dictionary: Record<AppLanguage, Record<string, string>> = {
   en: {},
   hi: {
     "Language": "भाषा",
@@ -446,4 +446,8 @@ export function useI18n() {
     throw new Error("useI18n must be used inside I18nProvider");
   }
   return context;
+}
+
+export function translateStaticText(key: string, language: AppLanguage) {
+  return dictionary[language][key] || key;
 }
