@@ -30,6 +30,7 @@ import {
   PiggyBank,
   Receipt,
   RefreshCw,
+  Scale,
   Settings,
   Shield,
   ShoppingBag,
@@ -132,6 +133,20 @@ const categories: Category[] = [
       { label: "Budget Planning", href: "/budgets", icon: TrendingUp, roles: ["chairman", "treasurer"], note: "Plan vs actuals" },
       { label: "Staff Payroll", href: "/salaries", icon: HandCoins, roles: ["chairman", "treasurer"], note: "Society staff salary" },
       { label: "Reports", href: "/reports", icon: FileText, roles: admin, note: "Financial summaries" },
+    ],
+  },
+  {
+    id: "legal",
+    title: "Free Legal Advice",
+    subtitle: "Legal Help",
+    description: "Free legal guidance, adviser contact, and society compliance notes.",
+    icon: Scale,
+    color: "from-slate-800 via-zinc-800 to-stone-700",
+    shadow: "shadow-slate-500/20",
+    modules: [
+      { label: "Legal Adviser Contact", href: "/settings", icon: Scale, roles: admin, note: "Advisor phone and profile" },
+      { label: "Legal Documents", href: "/documents", icon: FolderOpen, roles: admin, note: "Bylaws and legal records" },
+      { label: "Committee Guidance", href: "/meetings", icon: FileText, roles: admin, note: "AGM, notices, and resolutions" },
     ],
   },
   {
@@ -282,6 +297,11 @@ function CategoryWorkspace({ category, isAdmin }: { category: Category; isAdmin:
       { label: "Create Notice", href: "/notices", icon: Megaphone },
       { label: "Open Complaints", href: "/complaints", icon: AlertTriangle },
       { label: "Upcoming Events", href: "/events", icon: CalendarCheck },
+    ],
+    legal: [
+      { label: "Update Adviser", href: "/settings", icon: Scale },
+      { label: "Open Documents", href: "/documents", icon: FolderOpen },
+      { label: "Meeting Records", href: "/meetings", icon: FileText },
     ],
     governance: [
       { label: "New Poll", href: "/polls", icon: Vote },
@@ -664,7 +684,7 @@ export default function DashboardPage() {
       .filter((category) => category.modules.length > 0);
     if (!admin.includes(role)) return filtered;
 
-    const adminOrder = ["management", "operations", "finance", "community", "governance"];
+    const adminOrder = ["management", "operations", "finance", "legal", "community", "governance"];
     return [...filtered].sort((a, b) => adminOrder.indexOf(a.id) - adminOrder.indexOf(b.id));
   }, [user?.role]);
 
