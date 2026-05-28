@@ -2,7 +2,7 @@
 
 ## Repository State
 
-The current Smart Society repository is an advanced demo/prototype application with a partially production-ready foundation.
+The current SmartSocietyHub repository is an advanced demo/prototype application with a partially production-ready foundation.
 
 The project already includes:
 

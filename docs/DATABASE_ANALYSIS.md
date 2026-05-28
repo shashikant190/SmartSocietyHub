@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Smart Society project uses:
+The SmartSocietyHub project uses:
 
 - Prisma ORM
 - PostgreSQL

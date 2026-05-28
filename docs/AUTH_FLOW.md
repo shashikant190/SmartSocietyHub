@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the authentication architecture and user session flow for Smart Society.
+This document defines the authentication architecture and user session flow for SmartSocietyHub.
 
 It standardizes:
 

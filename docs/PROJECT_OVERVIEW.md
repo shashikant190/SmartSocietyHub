@@ -1,8 +1,8 @@
-# Smart Society — Project Overview
+# SmartSocietyHub — Project Overview
 
 ## Project Summary
 
-Smart Society is a modern society/apartment management platform designed for residential communities and housing societies.
+SmartSocietyHub is a modern society/apartment management platform designed for residential communities and housing societies.
 
 The application aims to centralize all society operations into a single dashboard-driven system for residents, administrators, security guards, and management committee members.
 

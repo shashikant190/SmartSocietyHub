@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the testing architecture and quality assurance strategy for Smart Society.
+This document defines the testing architecture and quality assurance strategy for SmartSocietyHub.
 
 It standardizes:
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the UI architecture and design consistency rules for Smart Society.
+This document defines the UI architecture and design consistency rules for SmartSocietyHub.
 
 It standardizes:
 
@@ -20,7 +20,7 @@ This file acts as the design system source of truth for all frontend/UI AI agent
 
 # Design Philosophy
 
-The Smart Society UI should feel:
+The SmartSocietyHub UI should feel:
 
 ```txt
 Modern
@@ -757,7 +757,7 @@ Potential future:
 
 # Final UI Philosophy
 
-The Smart Society UI should become:
+The SmartSocietyHub UI should become:
 
 ```txt
 Operational

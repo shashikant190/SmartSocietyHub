@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the immediate execution plan for the Smart Society repository after the initial project analysis.
+This document defines the immediate execution plan for the SmartSocietyHub repository after the initial project analysis.
 
 It helps:
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the state management strategy for Smart Society.
+This document defines the state management strategy for SmartSocietyHub.
 
 It standardizes:
 
@@ -678,7 +678,7 @@ Potential future:
 
 # Final State Management Philosophy
 
-The Smart Society state architecture should become:
+The SmartSocietyHub state architecture should become:
 
 ```txt
 Predictable

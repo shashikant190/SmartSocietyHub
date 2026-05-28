@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-Smart Society currently follows a dashboard-centric modular architecture using:
+SmartSocietyHub currently follows a dashboard-centric modular architecture using:
 
 - Next.js App Router
 - API route backend

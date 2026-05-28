@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the authorization architecture for Smart Society.
+This document defines the authorization architecture for SmartSocietyHub.
 
 It standardizes:
 

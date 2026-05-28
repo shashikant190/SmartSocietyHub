@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document identifies the highest-priority architectural and implementation refactors required before Smart Society can safely scale into a production-grade platform.
+This document identifies the highest-priority architectural and implementation refactors required before SmartSocietyHub can safely scale into a production-grade platform.
 
 This file helps:
 

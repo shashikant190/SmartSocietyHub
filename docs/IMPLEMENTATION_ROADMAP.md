@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the recommended execution strategy for transforming the current Smart Society repository from:
+This document defines the recommended execution strategy for transforming the current SmartSocietyHub repository from:
 
 ```txt
 Advanced Prototype

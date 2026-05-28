@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document tracks actionable implementation tasks for converting Smart Society into a production-ready platform.
+This document tracks actionable implementation tasks for converting SmartSocietyHub into a production-ready platform.
 
 Unlike:
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Defines the notification system structure for Smart Society.
+Defines the notification system structure for SmartSocietyHub.
 
 Covers:
 

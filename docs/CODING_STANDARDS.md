@@ -9,7 +9,7 @@ This document defines mandatory development standards for:
 - reviewers
 - future maintainers
 
-The goal is to keep the Smart Society codebase:
+The goal is to keep the SmartSocietyHub codebase:
 
 - scalable
 - predictable
@@ -802,7 +802,7 @@ UI should support:
 
 # Final Development Philosophy
 
-The Smart Society project should evolve into:
+The SmartSocietyHub project should evolve into:
 
 ```txt
 Stable
