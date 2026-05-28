@@ -98,7 +98,7 @@ export default function Header({
           </button>
           <div className="hidden sm:block">
             <h1 className="text-sm font-medium text-text-secondary">
-              {t("Society Manager")}
+              {t("SmartSocietyHub")}
             </h1>
           </div>
         </div>

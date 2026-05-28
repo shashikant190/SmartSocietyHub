@@ -1,7 +1,7 @@
 {
-  "name": "Society Manager",
-  "short_name": "SocietyMgr",
-  "description": "Complete society management platform - billing, security, maintenance & community",
+  "name": "SmartSocietyHub",
+  "short_name": "SmartHub",
+  "description": "SmartSocietyHub - complete society management platform for billing, security, maintenance & community",
   "start_url": "/dashboard",
   "display": "standalone",
   "orientation": "portrait",

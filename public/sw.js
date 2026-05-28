@@ -44,7 +44,7 @@ self.addEventListener('push', function(event) {
       ],
     };
     event.waitUntil(
-      self.registration.showNotification(data.title || 'Society Manager', options)
+      self.registration.showNotification(data.title || 'SmartSocietyHub', options)
     );
   } catch (e) {
     console.error('Push parse error:', e);

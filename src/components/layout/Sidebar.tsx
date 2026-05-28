@@ -133,7 +133,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({
-  societyName = "Loading...",
+  societyName = "SmartSocietyHub",
   societyAddress = "",
   isOpen = false,
   onClose,
@@ -157,6 +157,8 @@ export default function Sidebar({
       items: section.items.filter((item) => !item.roles || item.roles.includes(userRole)),
     }))
     .filter((section) => section.items.length > 0);
+  const displaySocietyName = societyName?.trim() || "SmartSocietyHub";
+  const displaySocietyAddress = societyAddress?.trim() || "Society";
 
   const toggleSection = (title: string) => {
     setCollapsedSections((current) => ({ ...current, [title]: !current[title] }));
@@ -187,11 +189,11 @@ export default function Sidebar({
             </div>
             {!isCompact && (
               <div className="min-w-0 flex-1 overflow-hidden">
-                <h2 className="text-sm font-black leading-tight text-white truncate" title={societyName}>
-                  {societyName}
+                <h2 className="text-sm font-black leading-tight text-white truncate" title={displaySocietyName}>
+                  {displaySocietyName}
                 </h2>
-                <p className="mt-0.5 text-[10px] font-black uppercase tracking-widest text-white/75 truncate" title={societyAddress}>
-                  {societyAddress || "Society"}
+                <p className="mt-0.5 text-[10px] font-black uppercase tracking-widest text-white/75 truncate" title={displaySocietyAddress}>
+                  {displaySocietyAddress}
                 </p>
               </div>
             )}

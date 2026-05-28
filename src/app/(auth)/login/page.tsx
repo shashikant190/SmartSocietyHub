@@ -56,10 +56,10 @@ export default function LoginPage() {
             <Building2 className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-text-primary">
-            Society Maintenance
+            SmartSocietyHub
           </h1>
           <p className="text-sm text-text-secondary mt-1">
-            Smart & Transparent Maintenance Collection
+            Smart society living, billing, security & community
           </p>
         </div>
 

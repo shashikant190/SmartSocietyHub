@@ -21,14 +21,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Society Manager — Smart Society Management Platform",
+  title: "SmartSocietyHub — Society Management Platform",
   description:
-    "Complete society management ERP - billing, security, maintenance, community. Zero-cost UPI payments. By Buzyhub.in",
+    "SmartSocietyHub is a complete society management ERP - billing, security, maintenance, community. Zero-cost UPI payments. By Buzyhub.in",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "SocietyMgr",
+    title: "SmartSocietyHub",
   },
 };
 
