@@ -83,6 +83,7 @@ export async function POST(request: NextRequest) {
         phone,
         purpose,
         vehicleNo,
+        vehiclePhotoUrl,
         entryMode,
       } = payload;
 
@@ -136,6 +137,7 @@ export async function POST(request: NextRequest) {
 
           purpose: purpose || "guest",
           vehicleNo: vehicleNo || null,
+          photoUrl: vehiclePhotoUrl || null,
 
           guardId: guard.id,
 

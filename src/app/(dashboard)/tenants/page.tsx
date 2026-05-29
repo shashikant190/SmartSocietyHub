@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { Plus, UserPlus, Search, Phone, Calendar, Home, CheckCircle, Clock, AlertTriangle, X, KeyRound, Copy, Pencil, LogOut } from "lucide-react";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface TenantEntry {
   id: string;
@@ -54,6 +55,7 @@ const formatFlatLabel = (flat?: { flatNumber?: string | null; wing?: string | nu
 };
 
 export default function TenantsPage() {
+  const { confirm, prompt } = useAppDialog();
   const [tenants, setTenants] = useState<TenantEntry[]>([]);
   const [flats, setFlats] = useState<Flat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,9 +127,23 @@ export default function TenantsPage() {
   };
 
   const createTenantLogin = async (tenant: TenantEntry) => {
-    const email = window.prompt("Enter tenant login email", tenant.email || "");
+    const email = await prompt({
+      title: "Create Tenant Login",
+      message: `Create portal access for ${tenant.name}.`,
+      label: "Tenant Login Email",
+      defaultValue: tenant.email || "",
+      placeholder: "tenant@example.com",
+      confirmLabel: "Continue",
+      required: true,
+    });
     if (!email) return;
-    const password = window.prompt("Temporary password. Leave blank to auto-generate", "");
+    const password = await prompt({
+      title: "Temporary Password",
+      message: "Leave blank to auto-generate a temporary password.",
+      label: "Temporary Password",
+      placeholder: "Optional",
+      confirmLabel: "Create Login",
+    });
     setCreatingLoginFor(tenant.id);
     try {
       const res = await fetch("/api/tenants", {
@@ -221,7 +237,13 @@ export default function TenantsPage() {
   };
 
   const terminateTenant = async (tenant: TenantEntry) => {
-    if (!confirm(`Move out ${tenant.name}? This archives the tenant occupancy but keeps history.`)) return;
+    const ok = await confirm({
+      title: "Move Out Tenant",
+      message: `Move out ${tenant.name}? This archives the tenant occupancy but keeps history.`,
+      confirmLabel: "Move Out",
+      danger: true,
+    });
+    if (!ok) return;
     setSaving(true);
     try {
       const res = await fetch("/api/tenants", {

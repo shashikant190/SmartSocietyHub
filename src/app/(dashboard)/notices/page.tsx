@@ -5,6 +5,7 @@ import { useUser } from "@/lib/user-context";
 import toast from "react-hot-toast";
 import { Plus, Pin, PinOff, Trash2, Megaphone, Bell, Calendar, User, Info, AlertTriangle, MessageCircle, X, ShieldCheck, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface Notice {
   id: string;
@@ -26,6 +27,7 @@ const categoryStyles: Record<string, { bg: string, text: string, icon: LucideIco
 };
 
 export default function NoticesPage() {
+  const { confirm } = useAppDialog();
   const [notices, setNotices] = useState<Notice[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -92,7 +94,13 @@ export default function NoticesPage() {
   };
 
   const deleteNotice = async (id: string) => {
-    if (!confirm("Permanently delete this notice from the board?")) return;
+    const ok = await confirm({
+      title: "Delete Notice",
+      message: "Permanently delete this notice from the board?",
+      confirmLabel: "Delete Notice",
+      danger: true,
+    });
+    if (!ok) return;
     await fetch(`/api/notices/${id}`, { method: "DELETE" });
     toast.success("Notice retracted");
     fetchNotices();

@@ -8,8 +8,10 @@ import { formatCurrency } from "@/lib/utils";
 import type { BillWithFlat, BillingSummary } from "@/types";
 import Link from "next/link";
 import { useLiveQuery } from "@/lib/use-live-data";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 export default function MaintenancePage() {
+  const { confirm } = useAppDialog();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [period, setPeriod] = useState(() => {
@@ -306,7 +308,12 @@ export default function MaintenancePage() {
   const deleteInvoice = async (bill: BillWithFlat) => {
     if (bill.status !== "pending") return;
     const total = bill.totalAmount || bill.amount + bill.lateFee + (bill.gstAmount || 0);
-    const confirmed = window.confirm(`Delete ${bill.description || "society dues"} invoice for Flat ${bill.flat.flatNumber} (${formatCurrency(total)})? This is allowed only before payment.`);
+    const confirmed = await confirm({
+      title: "Delete Invoice",
+      message: `Delete ${bill.description || "society dues"} invoice for Flat ${bill.flat.flatNumber} (${formatCurrency(total)})? This is allowed only before payment.`,
+      confirmLabel: "Delete Invoice",
+      danger: true,
+    });
     if (!confirmed) return;
 
     try {
@@ -798,7 +805,13 @@ export default function MaintenancePage() {
                 {markPaidBill.status !== "pending" && (
                   <button 
                     onClick={async () => {
-                      if (!confirm("Are you sure you want to REVERT this payment? This will mark it as PENDING again.")) return;
+                      const ok = await confirm({
+                        title: "Revert Payment",
+                        message: "Revert this payment? This will mark the invoice as pending again.",
+                        confirmLabel: "Revert Payment",
+                        danger: true,
+                      });
+                      if (!ok) return;
                       try {
                         const res = await fetch(`/api/maintenance/bills/${markPaidBill.id}`, {
                           method: "PATCH",

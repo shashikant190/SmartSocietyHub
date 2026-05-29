@@ -937,6 +937,7 @@ model MeetingMinutes {
   agenda      String
   minutes     String
   decisions   String?
+  photoUrls   String?   // JSON array of meeting register/minutes photo URLs
   recordedBy  String
   createdAt   DateTime @default(now())
   society     Society  @relation(fields: [societyId], references: [id])

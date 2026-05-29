@@ -5,6 +5,7 @@ import ToastProvider from "@/components/ui/Toast";
 import Script from "next/script";
 import { I18nProvider } from "@/lib/i18n";
 import PageTextTranslator from "@/components/ui/PageTextTranslator";
+import { AppDialogProvider } from "@/components/ui/AppDialogProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -65,8 +66,10 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ToastProvider />
         <I18nProvider>
-          <PageTextTranslator />
-          {children}
+          <AppDialogProvider>
+            <PageTextTranslator />
+            {children}
+          </AppDialogProvider>
         </I18nProvider>
         <Script id="sw-register" strategy="lazyOnload">{`
           if ('serviceWorker' in navigator) {

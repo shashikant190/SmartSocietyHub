@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { Plus, Car, Trash2, Share2, User, Home, ShieldAlert, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/user-context";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface ParkingSlot {
   id: string;
@@ -47,6 +48,7 @@ const typeIcons: Record<string, string> = {
 
 export default function ParkingPage() {
   const router = useRouter();
+  const { confirm } = useAppDialog();
   const [slots, setSlots] = useState<ParkingSlot[]>([]);
   const [assignableOccupancies, setAssignableOccupancies] = useState<AssignableOccupancy[]>([]);
   const [nextSlotNumber, setNextSlotNumber] = useState("P-001");
@@ -125,7 +127,13 @@ export default function ParkingPage() {
   };
 
   const handleUnassign = async (id: string) => {
-    if (!confirm("Are you sure you want to free this slot?")) return;
+    const ok = await confirm({
+      title: "Free Parking Slot",
+      message: "Free this slot and remove the current assignment?",
+      confirmLabel: "Free Slot",
+      danger: true,
+    });
+    if (!ok) return;
     try {
       await fetch(`/api/parking/${id}`, {
         method: "PATCH",
@@ -138,7 +146,13 @@ export default function ParkingPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this physical parking slot from records?")) return;
+    const ok = await confirm({
+      title: "Delete Parking Slot",
+      message: "Delete this physical parking slot from records?",
+      confirmLabel: "Delete Slot",
+      danger: true,
+    });
+    if (!ok) return;
     await fetch(`/api/parking/${id}`, { method: "DELETE" });
     toast.success("Slot deleted");
     fetchSlots();

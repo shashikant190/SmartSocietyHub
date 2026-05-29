@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
-import { FolderOpen, Plus, FileText, Download, Trash2, Shield, Settings, File } from "lucide-react";
+import { FolderOpen, Plus, FileText, Eye, Trash2, Shield, Settings, File, X } from "lucide-react";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface Document {
   id: string;
@@ -24,10 +25,12 @@ const categoryConfig: Record<string, { icon: React.ComponentType<{className?: st
 };
 
 export default function DocumentsPage() {
+  const { confirm } = useAppDialog();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<Document | null>(null);
   const [form, setForm] = useState({ title: "", category: "general", fileName: "", fileUrl: "", fileSize: 0 });
 
   const fetchDocuments = useCallback(() => {
@@ -41,19 +44,27 @@ export default function DocumentsPage() {
 
   useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
-  // Mock file upload - in a real app this would upload to Supabase/S3 first
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setForm(f => ({
-        ...f,
-        fileName: file.name,
-        fileSize: file.size,
-        // Using a fake URL for now until real storage is integrated
-        fileUrl: `https://example.com/docs/${encodeURIComponent(file.name)}` 
-      }));
+      if (file.size > 3_000_000) {
+        toast.error("Document must be under 3 MB for preview storage");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setForm(f => ({
+          ...f,
+          fileName: file.name,
+          fileSize: file.size,
+          fileUrl: String(reader.result || ""),
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
+
+  const isImagePreview = (doc: Document) => doc.fileUrl.startsWith("data:image") || /\.(png|jpe?g|webp|gif)$/i.test(doc.fileName);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +94,13 @@ export default function DocumentsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this document?")) return;
+    const ok = await confirm({
+      title: "Delete Document",
+      message: "Delete this document from the repository? This action cannot be undone.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+    if (!ok) return;
     await fetch(`/api/documents/${id}`, { method: "DELETE" });
     toast.success("Document deleted");
     fetchDocuments();
@@ -157,9 +174,9 @@ export default function DocumentsPage() {
                           <p>{new Date(doc.createdAt).toLocaleDateString()}</p>
                         </div>
                         <div className="flex gap-2">
-                          <a href={doc.fileUrl} target="_blank" rel="noreferrer" className="btn btn-secondary btn-sm !py-1 !px-2" title="Download">
-                            <Download className="w-3.5 h-3.5" />
-                          </a>
+                          <button onClick={() => setPreviewDoc(doc)} className="btn btn-secondary btn-sm !py-1 !px-2" title="Preview Document">
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
                           <button onClick={() => handleDelete(doc.id)} className="btn btn-secondary btn-sm !p-1 text-danger" title="Delete">
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -198,6 +215,29 @@ export default function DocumentsPage() {
                 <button type="submit" disabled={saving} className="btn btn-primary">{saving ? <div className="spinner !w-4 !h-4 !border-white/30 !border-t-white" /> : "Upload"}</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {previewDoc && (
+        <div className="modal-overlay" onClick={() => setPreviewDoc(null)}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl h-[80vh] p-5 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-text-primary">Preview Document</h3>
+                <p className="text-xs text-text-secondary mt-1">{previewDoc.title} · {previewDoc.fileName}</p>
+              </div>
+              <button onClick={() => setPreviewDoc(null)} className="p-2 rounded-lg hover:bg-surface text-text-secondary">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden rounded-xl border border-border bg-surface">
+              {isImagePreview(previewDoc) ? (
+                <img src={previewDoc.fileUrl} alt={previewDoc.title} className="h-full w-full object-contain" />
+              ) : (
+                <iframe src={previewDoc.fileUrl} title={previewDoc.title} className="h-full w-full bg-white" />
+              )}
+            </div>
           </div>
         </div>
       )}

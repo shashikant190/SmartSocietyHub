@@ -5,6 +5,7 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   Building2,
+  Camera,
   History,
   Home,
   LogIn,
@@ -13,6 +14,7 @@ import {
   Search,
   Shield,
   Truck,
+  Trash2,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -55,6 +57,7 @@ interface GateVisitor {
   phone: string | null;
   purpose: string;
   vehicleNo: string | null;
+  photoUrl: string | null;
   status: string;
   residentResponse: string | null;
   isPreApproved: boolean;
@@ -139,6 +142,7 @@ export default function GuardGatePage() {
     phone: "",
     purpose: "guest",
     vehicleNo: "",
+    vehiclePhotoUrl: "",
     entryMode: "approval",
   });
   const [staffCode, setStaffCode] = useState("");
@@ -259,7 +263,7 @@ export default function GuardGatePage() {
         toast.success(data.message || "Done");
         fetchGateData();
         if (action === "visitor_entry") {
-          setVForm({ flatNumber: "", visitorName: "", phone: "", purpose: "guest", vehicleNo: "", entryMode: "approval" });
+          setVForm({ flatNumber: "", visitorName: "", phone: "", purpose: "guest", vehicleNo: "", vehiclePhotoUrl: "", entryMode: "approval" });
           setFlatSearch("");
         }
         if (action === "staff_checkin") setStaffCode("");
@@ -272,6 +276,23 @@ export default function GuardGatePage() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleVehiclePhoto = (file?: File) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please capture or select an image");
+      return;
+    }
+    if (file.size > 1_500_000) {
+      toast.error("Vehicle photo must be under 1.5 MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setVForm((current) => ({ ...current, vehiclePhotoUrl: String(reader.result || "") }));
+    };
+    reader.readAsDataURL(file);
   };
 
   if (!guard) {
@@ -417,6 +438,29 @@ export default function GuardGatePage() {
               </select>
               <input className="bg-surface border border-border rounded-xl px-3 py-3 text-xs font-bold" placeholder="Vehicle No" value={vForm.vehicleNo} onChange={(e) => setVForm({ ...vForm, vehicleNo: e.target.value })} />
             </div>
+            <div className="rounded-xl border border-dashed border-border bg-surface p-3">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-text-tertiary">Vehicle Photo Optional</p>
+                  <p className="text-[10px] text-text-secondary mt-0.5">Enter vehicle number or capture the plate photo.</p>
+                </div>
+                {!vForm.vehiclePhotoUrl && (
+                  <label className="shrink-0 cursor-pointer rounded-xl bg-primary px-3 py-2 text-[10px] font-bold text-white flex items-center gap-1.5">
+                    <Camera className="w-3.5 h-3.5" />
+                    Take Photo
+                    <input type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => handleVehiclePhoto(e.target.files?.[0])} />
+                  </label>
+                )}
+              </div>
+              {vForm.vehiclePhotoUrl && (
+                <div className="relative mt-3 overflow-hidden rounded-xl border border-border bg-white">
+                  <img src={vForm.vehiclePhotoUrl} alt="Vehicle plate preview" className="h-36 w-full object-cover" />
+                  <button type="button" onClick={() => setVForm({ ...vForm, vehiclePhotoUrl: "" })} className="absolute right-2 top-2 rounded-lg bg-white/90 p-1.5 text-danger shadow-sm">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <button type="button" onClick={() => setVForm({ ...vForm, entryMode: "approval" })} className={`rounded-xl border p-3 text-xs font-bold ${vForm.entryMode === "approval" ? "border-primary bg-primary/5 text-primary" : "border-border text-text-secondary"}`}>
@@ -509,6 +553,9 @@ export default function GuardGatePage() {
                   <div>
                     <p className="text-xs font-bold text-text-primary">{visitor.visitorName}</p>
                     <p className="text-[10px] text-text-secondary">Flat {visitor.flatNumber} · {visitor.flat?.currentOccupantName || "Occupant"} · {visitor.purpose}</p>
+                    {visitor.photoUrl && (
+                      <img src={visitor.photoUrl} alt="Vehicle number photo" className="mt-2 h-16 w-24 rounded-lg border border-border object-cover" />
+                    )}
                   </div>
                   {visitor.status === "in" ? (
                     <button onClick={() => gateAction("visitor_exit", { visitorId: visitor.id })} disabled={actionLoading} className="bg-red-600 text-white px-3 py-2 rounded-lg font-bold text-[10px]">

@@ -7,6 +7,7 @@ import {
   Building2, Plus, Calendar, Clock, Users, X, Trash2,
   MapPin, IndianRupee, CheckCircle, ChevronLeft, ChevronRight,
 } from "lucide-react";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface Facility {
   id: string;
@@ -61,6 +62,7 @@ const formatTime = (t: string) => {
 };
 
 export default function AmenitiesPage() {
+  const { confirm } = useAppDialog();
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [myBookings, setMyBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +110,9 @@ export default function AmenitiesPage() {
 
   const openBooking = (facility: Facility) => {
     setSelectedFacility(facility);
-    setBookingForm({ startTime: "09:00", endTime: "11:00", purpose: "" });
+    const firstAvailable = timeSlots.find((slot) => !isSlotBooked(facility, slot)) || "09:00";
+    const nextSlot = timeSlots.find((slot) => slot > firstAvailable && !doesRangeOverlapBooking(facility, firstAvailable, slot)) || "11:00";
+    setBookingForm({ startTime: firstAvailable, endTime: nextSlot, purpose: "" });
     setShowBookingModal(true);
   };
 
@@ -117,6 +121,10 @@ export default function AmenitiesPage() {
     if (!selectedFacility) return;
     if (bookingForm.startTime >= bookingForm.endTime) {
       toast.error("End time must be after start time");
+      return;
+    }
+    if (doesRangeOverlapBooking(selectedFacility, bookingForm.startTime, bookingForm.endTime)) {
+      toast.error("This time range overlaps an existing booking");
       return;
     }
     setSaving(true);
@@ -178,7 +186,13 @@ export default function AmenitiesPage() {
   };
 
   const cancelBooking = async (bookingId: string) => {
-    if (!confirm("Cancel this booking?")) return;
+    const ok = await confirm({
+      title: "Cancel Booking",
+      message: "Cancel this amenity booking? The slot will become available for others.",
+      confirmLabel: "Cancel Booking",
+      danger: true,
+    });
+    if (!ok) return;
     try {
       const res = await fetch("/api/facilities/bookings", {
         method: "DELETE",
@@ -207,6 +221,20 @@ export default function AmenitiesPage() {
   const getSlotBooking = (facility: Facility, time: string) => {
     return facility.bookings?.find((b) => b.startTime <= time && b.endTime > time && b.status === "confirmed");
   };
+
+  const getBookedRanges = (facility: Facility) => {
+    return (facility.bookings || [])
+      .filter((b) => b.status === "confirmed")
+      .sort((a, b) => a.startTime.localeCompare(b.startTime));
+  };
+
+  const doesRangeOverlapBooking = (facility: Facility, startTime: string, endTime: string) => {
+    return getBookedRanges(facility).some((booking) => startTime < booking.endTime && endTime > booking.startTime);
+  };
+
+  const selectedRangeBlocked = selectedFacility
+    ? doesRangeOverlapBooking(selectedFacility, bookingForm.startTime, bookingForm.endTime)
+    : false;
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 animate-in fade-in duration-500 px-4 sm:px-6 lg:px-0 pb-20">
@@ -300,6 +328,18 @@ export default function AmenitiesPage() {
                   {/* Time Slots Grid */}
                   <div className="p-4">
                     <p className="text-[9px] font-bold text-text-tertiary uppercase tracking-wider mb-2">Availability</p>
+                    {getBookedRanges(f).length > 0 && (
+                      <div className="mb-3 rounded-xl border border-red-100 bg-red-50 p-3">
+                        <p className="text-[9px] font-black uppercase tracking-wider text-red-600">Booked slots</p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {getBookedRanges(f).map((booking) => (
+                            <span key={booking.id} className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-red-100">
+                              {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <div className="flex flex-wrap gap-1.5">
                       {timeSlots.map((t) => {
                         const booked = isSlotBooked(f, t);
@@ -310,11 +350,11 @@ export default function AmenitiesPage() {
                             title={booked && booking ? `Booked by Flat ${booking.flatNumber}` : "Available"}
                             className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-default ${
                               booked
-                                ? "bg-red-500/10 text-red-600 line-through"
+                                ? "bg-red-500/10 text-red-600"
                                 : "bg-green-500/10 text-green-700"
                             }`}
                           >
-                            {formatTime(t)}
+                            {booked ? "Booked" : formatTime(t)}
                           </div>
                         );
                       })}
@@ -410,11 +450,30 @@ export default function AmenitiesPage() {
                   <label className="text-[10px] font-bold text-text-tertiary uppercase tracking-wider mb-1.5 block">End Time</label>
                   <select className="input !rounded-xl text-sm font-semibold" value={bookingForm.endTime} onChange={(e) => setBookingForm({ ...bookingForm, endTime: e.target.value })}>
                     {timeSlots.filter((t) => t > bookingForm.startTime).map((t) => (
-                      <option key={t} value={t}>{formatTime(t)}</option>
+                      <option key={t} value={t} disabled={doesRangeOverlapBooking(selectedFacility, bookingForm.startTime, t)}>
+                        {formatTime(t)} {doesRangeOverlapBooking(selectedFacility, bookingForm.startTime, t) ? "(Crosses booked slot)" : ""}
+                      </option>
                     ))}
                   </select>
                 </div>
               </div>
+              {getBookedRanges(selectedFacility).length > 0 && (
+                <div className="rounded-xl border border-red-100 bg-red-50 p-3">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-red-600">Unavailable today</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {getBookedRanges(selectedFacility).map((booking) => (
+                      <span key={booking.id} className="rounded-lg bg-white px-2.5 py-1 text-[10px] font-bold text-red-700 ring-1 ring-red-100">
+                        {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {selectedRangeBlocked && (
+                <p className="rounded-xl bg-red-50 p-3 text-xs font-semibold text-red-700">
+                  This time range overlaps an existing booking. Please choose another available slot.
+                </p>
+              )}
               <div>
                 <label className="text-[10px] font-bold text-text-tertiary uppercase tracking-wider mb-1.5 block">Purpose (optional)</label>
                 <input className="input !rounded-xl text-sm font-semibold" value={bookingForm.purpose} onChange={(e) => setBookingForm({ ...bookingForm, purpose: e.target.value })} placeholder="Birthday party, workout session..." />
@@ -432,7 +491,7 @@ export default function AmenitiesPage() {
               )}
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowBookingModal(false)} className="btn btn-secondary !rounded-xl !py-2.5 !px-6 text-xs font-bold">Cancel</button>
-                <button type="submit" disabled={saving} className="btn btn-primary !rounded-xl !py-2.5 !px-6 text-xs font-bold flex items-center gap-2">
+                <button type="submit" disabled={saving || selectedRangeBlocked} className="btn btn-primary !rounded-xl !py-2.5 !px-6 text-xs font-bold flex items-center gap-2">
                   {saving ? <div className="spinner !w-4 !h-4" /> : <CheckCircle className="w-4 h-4" />}
                   {saving ? "Booking..." : "Confirm Booking"}
                 </button>

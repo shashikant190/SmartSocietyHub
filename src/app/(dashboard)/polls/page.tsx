@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useUser } from "@/lib/user-context";
 import toast from "react-hot-toast";
 import { Plus, Vote, BarChart3, Lock, Share2, Calendar, User, Info, CheckCircle2, X } from "lucide-react";
+import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface Poll {
   id: string;
@@ -19,6 +20,7 @@ interface Poll {
 }
 
 export default function PollsPage() {
+  const { confirm } = useAppDialog();
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -89,7 +91,12 @@ export default function PollsPage() {
   };
 
   const closePoll = async (id: string) => {
-    if (!confirm("Are you sure you want to finalize and close this poll?")) return;
+    const ok = await confirm({
+      title: "Close Poll",
+      message: "Finalize and close this poll? Residents will no longer be able to vote.",
+      confirmLabel: "Close Poll",
+    });
+    if (!ok) return;
     await fetch(`/api/polls/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

@@ -549,7 +549,6 @@ function ResidentDashboard({
                 {[
                   { href: "/amenities", label: "Amenities", icon: Building2, bg: "from-teal-400 to-emerald-500", shadow: "shadow-emerald-500/30" },
                   { href: "/complaints", label: "Helpdesk", icon: AlertTriangle, bg: "from-rose-400 to-pink-500", shadow: "shadow-rose-500/30" },
-                  { href: "/directory", label: "Directory", icon: BookOpen, bg: "from-violet-400 to-purple-500", shadow: "shadow-violet-500/30" },
                   { href: "/events", label: "Events", icon: CalendarCheck, bg: "from-amber-400 to-orange-500", shadow: "shadow-orange-500/30" },
                   { href: "/marketplace", label: "Buy & Sell", icon: ShoppingBag, bg: "from-sky-400 to-blue-500", shadow: "shadow-blue-500/30" },
                   { href: "/parking", label: "Parking", icon: Car, bg: "from-lime-400 to-emerald-500", shadow: "shadow-lime-500/30" },

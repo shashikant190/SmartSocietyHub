@@ -7,14 +7,42 @@ export async function GET() {
   if (error) return Response.json({ error }, { status });
   if (!session?.societyId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
+  const context = await getOccupancyContext(session);
   const marketplace = await prisma.marketplaceListing.findMany({
-    where: { societyId: session!.societyId, status: "active", archivedAt: null, moderationStatus: "approved" },
-    include: { images: { orderBy: { sortOrder: "asc" } } },
+    where: { societyId: session!.societyId, status: { in: ["active", "reserved"] }, archivedAt: null, moderationStatus: "approved" },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+      interests: {
+        where: { status: { in: ["interested", "accepted", "rejected"] } },
+        include: {
+          person: {
+            select: {
+              id: true,
+              name: true,
+              phone: true,
+              users: { select: { id: true, email: true, flat: { select: { flatNumber: true } } } },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
     orderBy: { createdAt: "desc" },
     take: 50,
   });
 
-  return Response.json(marketplace);
+  return Response.json(marketplace.map((listing) => {
+    const isMine = listing.userId === session.userId;
+    const myInterest = context?.person?.id
+      ? listing.interests.find((interest) => interest.personId === context.person?.id)
+      : null;
+    return {
+      ...listing,
+      isMine,
+      interests: isMine ? listing.interests : myInterest ? [myInterest] : [],
+      myInterestStatus: myInterest?.status || null,
+    };
+  }));
 }
 
 export async function POST(request: Request) {
@@ -30,7 +58,7 @@ export async function POST(request: Request) {
   }
 
   const context = await getOccupancyContext(session);
-  const images = Array.isArray(imageUrls) ? imageUrls : [];
+  const images = Array.isArray(imageUrls) ? imageUrls.filter((url) => typeof url === "string" && url.trim()) : [];
 
   const listing = await prisma.$transaction(async (tx) => {
     const created = await tx.marketplaceListing.create({

@@ -24,10 +24,15 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { title, date, meetingType, attendees, agenda, minutes, decisions } = body;
+    const { title, date, meetingType, attendees, agenda, minutes, decisions, photoUrls } = body;
+    const photos = Array.isArray(photoUrls) ? photoUrls.filter((url) => typeof url === "string" && url.trim()) : [];
 
-    if (!title || !date || !agenda || !minutes) {
-      return Response.json({ error: "Title, date, agenda, and minutes are required" }, { status: 400 });
+    if (!title || !date) {
+      return Response.json({ error: "Title and date are required" }, { status: 400 });
+    }
+
+    if (!agenda && !minutes && photos.length === 0) {
+      return Response.json({ error: "Add meeting text or at least one photo" }, { status: 400 });
     }
 
     const meeting = await prisma.meetingMinutes.create({
@@ -37,9 +42,10 @@ export async function POST(request: NextRequest) {
         date: new Date(date),
         meetingType: meetingType || "general",
         attendees: attendees || null,
-        agenda,
-        minutes,
+        agenda: agenda || "Photo record attached",
+        minutes: minutes || "Photo record attached",
         decisions: decisions || null,
+        photoUrls: photos.length ? JSON.stringify(photos) : null,
         recordedBy: session.name,
       },
     });

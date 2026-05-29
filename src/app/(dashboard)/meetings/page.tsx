@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
-import { Plus, FileText, Calendar } from "lucide-react";
+import { Plus, FileText, Calendar, Image as ImageIcon, Trash2 } from "lucide-react";
 
 interface Meeting {
   id: string;
@@ -13,6 +13,7 @@ interface Meeting {
   agenda: string;
   minutes: string;
   decisions: string | null;
+  photoUrls: string | null;
   recordedBy: string;
   createdAt: string;
 }
@@ -38,6 +39,7 @@ export default function MeetingsPage() {
     agenda: "",
     minutes: "",
     decisions: "",
+    photoUrls: [] as string[],
   });
 
   const fetchMeetings = useCallback(() => {
@@ -53,6 +55,10 @@ export default function MeetingsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.agenda && !form.minutes && form.photoUrls.filter(Boolean).length === 0) {
+      toast.error("Add meeting text or at least one photo");
+      return;
+    }
     setSaving(true);
     try {
       const res = await fetch("/api/meetings", {
@@ -63,7 +69,7 @@ export default function MeetingsPage() {
       if (res.ok) {
         toast.success("Meeting minutes recorded");
         setShowForm(false);
-        setForm({ title: "", date: new Date().toISOString().split("T")[0], meetingType: "general", attendees: "", agenda: "", minutes: "", decisions: "" });
+        setForm({ title: "", date: new Date().toISOString().split("T")[0], meetingType: "general", attendees: "", agenda: "", minutes: "", decisions: "", photoUrls: [] });
         fetchMeetings();
       } else {
         const d = await res.json();
@@ -71,6 +77,46 @@ export default function MeetingsPage() {
       }
     } catch { toast.error("Something went wrong"); }
     finally { setSaving(false); }
+  };
+
+  const parsePhotos = (value: string | null) => {
+    if (!value) return [];
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter((url) => typeof url === "string" && url.trim()) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const handleMeetingPhotos = (files?: FileList | null) => {
+    if (!files?.length) return;
+    const selected = Array.from(files).slice(0, 6);
+    selected.forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image photos are supported");
+        return;
+      }
+      if (file.size > 1_500_000) {
+        toast.error(`${file.name} must be under 1.5 MB`);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setForm((current) => ({
+          ...current,
+          photoUrls: [...current.photoUrls, String(reader.result || "")].slice(0, 6),
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeMeetingPhoto = (index: number) => {
+    setForm((current) => ({
+      ...current,
+      photoUrls: current.photoUrls.filter((_, itemIndex) => itemIndex !== index),
+    }));
   };
 
   return (
@@ -97,6 +143,7 @@ export default function MeetingsPage() {
           {meetings.map((m) => {
             const config = typeConfig[m.meetingType] || typeConfig.general;
             const isExpanded = expanded === m.id;
+            const photos = parsePhotos(m.photoUrls);
             return (
               <div key={m.id} className="card card-hover cursor-pointer" onClick={() => setExpanded(isExpanded ? null : m.id)}>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -123,6 +170,18 @@ export default function MeetingsPage() {
                       <h4 className="text-xs font-semibold text-text-secondary uppercase mb-1">Minutes</h4>
                       <p className="text-sm whitespace-pre-wrap">{m.minutes}</p>
                     </div>
+                    {photos.length > 0 && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-text-secondary uppercase mb-2">Attached Photos</h4>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                          {photos.map((photo, index) => (
+                            <a key={index} href={photo} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-xl border border-border bg-surface">
+                              <img src={photo} alt={`Meeting attachment ${index + 1}`} className="h-32 w-full object-cover" />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     {m.decisions && (
                       <div className="p-3 bg-primary/5 rounded-lg">
                         <h4 className="text-xs font-semibold text-primary uppercase mb-1">Decisions</h4>
@@ -164,9 +223,33 @@ export default function MeetingsPage() {
                 <div><label className="label">Date *</label><input type="date" className="input" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required /></div>
                 <div><label className="label">Attendees</label><input className="input" placeholder="Names..." value={form.attendees} onChange={(e) => setForm({ ...form, attendees: e.target.value })} /></div>
               </div>
-              <div><label className="label">Agenda *</label><textarea className="input !h-auto" rows={3} placeholder="Meeting agenda points..." value={form.agenda} onChange={(e) => setForm({ ...form, agenda: e.target.value })} required /></div>
-              <div><label className="label">Minutes *</label><textarea className="input !h-auto" rows={4} placeholder="What was discussed..." value={form.minutes} onChange={(e) => setForm({ ...form, minutes: e.target.value })} required /></div>
+              <div className="rounded-xl border border-dashed border-border bg-surface p-3 text-center text-xs font-semibold text-text-secondary">
+                Add written details, upload meeting photos, or use both.
+              </div>
+              <div><label className="label">Agenda</label><textarea className="input !h-auto" rows={3} placeholder="Meeting agenda points..." value={form.agenda} onChange={(e) => setForm({ ...form, agenda: e.target.value })} /></div>
+              <div><label className="label">Minutes</label><textarea className="input !h-auto" rows={4} placeholder="What was discussed..." value={form.minutes} onChange={(e) => setForm({ ...form, minutes: e.target.value })} /></div>
               <div><label className="label">Decisions Made</label><textarea className="input !h-auto" rows={2} placeholder="Key decisions taken..." value={form.decisions} onChange={(e) => setForm({ ...form, decisions: e.target.value })} /></div>
+              <div>
+                <label className="label">OR Add Photos</label>
+                <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface p-4 text-center text-sm font-bold text-text-secondary hover:bg-primary/5 hover:text-primary">
+                  <ImageIcon className="mb-2 h-6 w-6" />
+                  Upload meeting register or minutes photos
+                  <span className="mt-1 text-[10px] font-semibold text-text-tertiary">Up to 6 photos, 1.5 MB each</span>
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleMeetingPhotos(e.target.files)} />
+                </label>
+                {form.photoUrls.length > 0 && (
+                  <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {form.photoUrls.map((photo, index) => (
+                      <div key={index} className="relative overflow-hidden rounded-xl border border-border">
+                        <img src={photo} alt={`Selected meeting photo ${index + 1}`} className="h-28 w-full object-cover" />
+                        <button type="button" onClick={() => removeMeetingPhoto(index)} className="absolute right-2 top-2 rounded-lg bg-white/90 p-1.5 text-danger shadow-sm">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className="flex justify-end gap-3 pt-2">
                 <button type="button" onClick={() => setShowForm(false)} className="btn btn-secondary">Cancel</button>
                 <button type="submit" disabled={saving} className="btn btn-primary">{saving ? <div className="spinner !w-4 !h-4 !border-white/30 !border-t-white" /> : "Save Minutes"}</button>
