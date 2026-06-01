@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Menu, LogOut, Settings, User, Shield, ChevronDown, Copy } from "lucide-react";
+import { Building2, Menu, LogOut, Settings, User, Shield, ChevronDown, Copy, PhoneCall } from "lucide-react";
 import { useRouter } from "next/navigation";
 import NotificationCenter from "@/components/ui/NotificationCenter";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -87,16 +87,72 @@ export default function Header({
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 border-b border-border px-4 backdrop-blur lg:px-6 dark:bg-[#0f172a]/95">
-      <div className="flex items-center justify-between h-16">
+    <header className="sticky top-0 z-30 border-b border-border bg-white/95 px-3 backdrop-blur lg:px-6 dark:bg-[#0f172a]/95">
+      <div className="lg:hidden">
+        <div className="flex min-h-[64px] items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-blue-700 text-white shadow-lg shadow-blue-500/20">
+              <Building2 className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="truncate text-lg font-black tracking-tight text-text-primary">
+                {t("SmartSocietyHub")}
+              </h1>
+              <p className="truncate text-[10px] font-black uppercase tracking-[0.2em] text-text-secondary">
+                {t(roleLabels[userRole] || userRole)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => router.push("/emergency")}
+              className="inline-flex h-11 items-center gap-1.5 rounded-2xl bg-cyan-500 px-4 text-sm font-black text-white shadow-lg shadow-cyan-500/20 active:scale-95"
+            >
+              <PhoneCall className="h-4 w-4" />
+              {t("Call")}
+            </button>
+            <button
+              onClick={onMenuToggle}
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-white text-text-primary shadow-sm active:scale-95 dark:bg-slate-900"
+              aria-label={t("Open menu")}
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-2 pb-3">
+          {canShareJoinCode ? (
+            <button
+              type="button"
+              onClick={copyJoinCode}
+              className="flex min-w-0 items-center gap-2 rounded-2xl border border-primary/20 bg-primary/5 px-3 py-2 text-primary"
+              title={t("Copy society join code")}
+            >
+              <span className="text-[9px] font-black uppercase tracking-widest text-primary/70">
+                {t("Join Code")}
+              </span>
+              <span className="truncate font-mono text-xs font-black tracking-widest">
+                {joinCode}
+              </span>
+              <Copy className="h-3.5 w-3.5 shrink-0" />
+            </button>
+          ) : (
+            <span className="text-xs font-semibold text-text-secondary">{t("Resident SuperApp")}</span>
+          )}
+          <div className="flex shrink-0 items-center gap-1.5">
+            <LanguageSelector />
+            <ThemeToggle />
+            <NotificationCenter />
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden h-16 items-center justify-between lg:flex">
         <div className="flex items-center gap-3">
-          <button
-            onClick={onMenuToggle}
-              className="lg:hidden p-2 rounded-lg hover:bg-surface transition-colors"
-          >
-            <Menu className="w-5 h-5 text-text-secondary" />
-          </button>
-          <div className="hidden sm:block">
+          <div>
             <h1 className="text-sm font-medium text-text-secondary">
               {t("SmartSocietyHub")}
             </h1>

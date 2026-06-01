@@ -453,7 +453,7 @@ function ResidentDashboard({
   const activeVisitors = visitors.filter((visitor) => ["pending_approval", "expected", "inside", "approved"].includes(visitor.status)).length;
 
   return (
-    <div className="-m-4 min-h-full bg-[#f8f4f2] p-4 dark:bg-[#07111f] lg:-m-6 lg:p-8">
+    <div className="-m-3 min-h-full bg-[#eef8fb] p-3 dark:bg-[#07111f] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-6 pb-24 lg:pb-8">
         <div className="flex flex-col gap-6 lg:flex-row">
           <div className="w-full flex-1 space-y-6 lg:w-2/3 xl:w-[70%]">
@@ -702,9 +702,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="-m-4 min-h-full bg-[#fbf7f5] p-4 dark:bg-[#07111f] lg:-m-6 lg:p-8">
+    <div className="-m-3 min-h-full bg-[#eef8fb] p-3 dark:bg-[#07111f] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
-        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/85 sm:p-7">
+        <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/85 sm:p-7">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.18),transparent_18rem)] sm:hidden" />
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
               <div className="mb-3 flex items-center gap-2">

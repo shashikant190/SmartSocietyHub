@@ -647,15 +647,87 @@ img {
 }
 
 @media (max-width: 640px) {
+  body {
+    background: #eef8fb;
+  }
+
+  .dark body {
+    background: #07111f;
+  }
+
   input,
   select,
   textarea {
     font-size: 16px;
   }
 
+  .card,
+  .stat-card {
+    border-radius: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 10px 30px -22px rgba(15, 23, 42, 0.45);
+  }
+
+  .page-header {
+    align-items: stretch;
+    gap: 0.875rem;
+    border-radius: 1.5rem;
+    background: white;
+    border: 1px solid var(--color-border);
+    padding: 1rem;
+    box-shadow: 0 10px 30px -24px rgba(15, 23, 42, 0.45);
+  }
+
+  .dark .page-header {
+    background: #111827;
+  }
+
+  .page-title {
+    font-size: 1.375rem;
+    line-height: 1.15;
+  }
+
+  .btn,
+  .input,
+  .select {
+    min-height: 46px;
+    border-radius: 1rem;
+  }
+
+  .btn {
+    font-weight: 800;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0.75rem;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: none;
+    max-height: 88dvh;
+    overflow-y: auto;
+    border-radius: 1.5rem;
+    padding: 1rem;
+  }
+
   .table-wrapper {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-radius: 1.25rem;
+  }
+
+  .table {
+    min-width: 680px;
+  }
+
+  .label {
+    font-weight: 800;
+  }
+
+  main {
+    scroll-padding-bottom: 7rem;
   }
 }
 

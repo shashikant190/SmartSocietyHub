@@ -61,20 +61,20 @@ export default function BottomNav({ userRole = "member" }: BottomNavProps) {
   }
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-border pb-safe transition-transform duration-300 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pt-1 dark:bg-[#0f172a]">
-      <div className="flex justify-around items-center h-[60px] px-2 max-w-md mx-auto relative">
+    <div className="fixed bottom-3 left-3 right-3 z-40 rounded-[1.75rem] border border-white/70 bg-white/95 px-2 pb-safe pt-2 shadow-[0_18px_45px_rgba(15,23,42,0.18)] backdrop-blur-xl transition-transform duration-300 dark:border-slate-700 dark:bg-[#0f172a]/95 lg:hidden">
+      <div className="mx-auto flex h-[60px] max-w-md items-center justify-around gap-1">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           return (
             <Link 
               key={item.href} 
               href={item.href}
-              className={`flex flex-col items-center justify-center w-16 h-full gap-1 transition-all ${
-                isActive ? "text-primary scale-105" : "text-text-secondary hover:text-text-primary"
+              className={`flex h-12 min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl transition-all ${
+                isActive ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-text-secondary hover:bg-surface hover:text-text-primary"
               }`}
             >
-              <item.icon className={`w-5 h-5 transition-all ${isActive ? "stroke-[2.5px]" : "stroke-[1.5px]"}`} />
-              <span className={`text-[10px] leading-none transition-all ${isActive ? "font-bold" : "font-medium"}`}>
+              <item.icon className={`h-5 w-5 transition-all ${isActive ? "stroke-[2.5px]" : "stroke-[1.7px]"}`} />
+              <span className={`max-w-full truncate px-1 text-[10px] leading-none transition-all ${isActive ? "font-black" : "font-semibold"}`}>
                 {t(item.label)}
               </span>
             </Link>

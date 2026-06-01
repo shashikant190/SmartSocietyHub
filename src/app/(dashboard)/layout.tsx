@@ -45,7 +45,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-surface">
+    <div className="flex h-screen overflow-hidden bg-[#eef8fb] dark:bg-[#07111f] lg:bg-surface">
       {!sidebarHidden && (
         <Sidebar
           societyName={user.societyName}
@@ -75,7 +75,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
           joinCode={user.joinCode}
           onMenuToggle={handleMenuToggle}
         />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6 pb-20 lg:pb-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-3 pb-28 lg:p-6 lg:pb-6">{children}</main>
       </div>
       <BottomNav userRole={user.role} />
       <LegalAdviserCall />
