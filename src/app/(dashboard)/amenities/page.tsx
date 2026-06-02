@@ -6,7 +6,10 @@ import toast from "react-hot-toast";
 import {
   Building2, Plus, Calendar, Clock, Users, X, Trash2,
   MapPin, IndianRupee, CheckCircle, ChevronLeft, ChevronRight,
+  Dumbbell, Waves, Landmark, House, PartyPopper, ClipboardList,
+  Trees, Trophy, Car, Gamepad2,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useAppDialog } from "@/components/ui/AppDialogProvider";
 
 interface Facility {
@@ -33,22 +36,23 @@ interface Booking {
   facility?: { name: string; capacity: number | null; ratePerHour: number };
 }
 
-const facilityIcons: Record<string, string> = {
-  gym: "🏋️",
-  pool: "🏊",
-  hall: "🏛️",
-  garden: "🌳",
-  "club house": "🏠",
-  "party hall": "🎉",
-  "meeting room": "📋",
-  terrace: "🌆",
-  court: "🏸",
-  parking: "🅿️",
+const facilityIcons: Record<string, LucideIcon> = {
+  gym: Dumbbell,
+  pool: Waves,
+  hall: Landmark,
+  garden: Trees,
+  "club house": House,
+  "party hall": PartyPopper,
+  "meeting room": ClipboardList,
+  terrace: Building2,
+  court: Trophy,
+  parking: Car,
+  games: Gamepad2,
 };
 
 const getIcon = (name: string) => {
   const key = Object.keys(facilityIcons).find((k) => name.toLowerCase().includes(k));
-  return key ? facilityIcons[key] : "🏢";
+  return key ? facilityIcons[key] : Building2;
 };
 
 const timeSlots = [
@@ -294,13 +298,17 @@ export default function AmenitiesPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {facilities.map((f) => (
+              {facilities.map((f) => {
+                const FacilityIcon = getIcon(f.name);
+                return (
                 <div key={f.id} className="bg-white rounded-2xl border border-border/50 overflow-hidden hover:shadow-sm transition-all group">
                   {/* Card Header */}
                   <div className="p-5 border-b border-border/30">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
-                        <span className="text-3xl">{getIcon(f.name)}</span>
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-50 text-primary ring-1 ring-orange-100 dark:bg-orange-500/10 dark:ring-orange-500/20">
+                          <FacilityIcon className="h-6 w-6" />
+                        </span>
                         <div>
                           <h3 className="text-base font-bold text-text-primary">{f.name}</h3>
                           {f.description && <p className="text-xs text-text-secondary mt-0.5">{f.description}</p>}
@@ -361,7 +369,8 @@ export default function AmenitiesPage() {
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+              })}
             </div>
           )}
         </>
@@ -377,10 +386,14 @@ export default function AmenitiesPage() {
               <p className="text-xs text-text-secondary mt-1">Book an amenity to see your reservations here</p>
             </div>
           ) : (
-            myBookings.map((b) => (
+            myBookings.map((b) => {
+              const BookingIcon = getIcon(b.facility?.name || "");
+              return (
               <div key={b.id} className="bg-white rounded-2xl border border-border/50 p-4 sm:p-5 flex items-center justify-between gap-4 hover:shadow-sm transition-all">
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <span className="text-2xl">{getIcon(b.facility?.name || "")}</span>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-orange-50 text-primary ring-1 ring-orange-100 dark:bg-orange-500/10 dark:ring-orange-500/20">
+                    <BookingIcon className="h-5 w-5" />
+                  </span>
                   <div>
                     <h3 className="text-sm font-bold text-text-primary">{b.facility?.name}</h3>
                     <div className="flex items-center gap-3 mt-1">
@@ -413,7 +426,8 @@ export default function AmenitiesPage() {
                   )}
                 </div>
               </div>
-            ))
+              );
+            })
           )}
         </div>
       )}
@@ -424,7 +438,14 @@ export default function AmenitiesPage() {
           <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{getIcon(selectedFacility.name)}</span>
+                {(() => {
+                  const SelectedIcon = getIcon(selectedFacility.name);
+                  return (
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-50 text-primary ring-1 ring-orange-100 dark:bg-orange-500/10 dark:ring-orange-500/20">
+                      <SelectedIcon className="h-6 w-6" />
+                    </span>
+                  );
+                })()}
                 <div>
                   <h2 className="text-lg font-bold text-text-primary">Book {selectedFacility.name}</h2>
                   <p className="text-xs text-text-secondary">

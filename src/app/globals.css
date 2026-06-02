@@ -648,11 +648,15 @@ img {
 
 @media (max-width: 640px) {
   body {
-    background: #fff7ed;
+    background:
+      radial-gradient(circle at top right, rgba(255, 107, 0, 0.09), transparent 18rem),
+      #f8fafc;
   }
 
   .dark body {
-    background: #0f172a;
+    background:
+      radial-gradient(circle at top right, rgba(255, 107, 0, 0.16), transparent 18rem),
+      #0f172a;
   }
 
   input,
@@ -665,7 +669,15 @@ img {
   .stat-card {
     border-radius: 1.5rem;
     padding: 1rem;
-    box-shadow: 0 10px 30px -22px rgba(15, 23, 42, 0.45);
+    border-color: rgba(226, 232, 240, 0.85);
+    box-shadow: 0 12px 34px -26px rgba(15, 23, 42, 0.55);
+  }
+
+  .dark .card,
+  .dark .stat-card {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: #111827;
+    box-shadow: none;
   }
 
   .page-header {
@@ -679,6 +691,7 @@ img {
   }
 
   .btn-primary {
+    background: linear-gradient(135deg, #ff7a1a, #ff5a00);
     box-shadow: 0 12px 24px -18px rgba(255, 107, 0, 0.75);
   }
 
@@ -700,6 +713,26 @@ img {
 
   .btn {
     font-weight: 800;
+  }
+
+  .input,
+  .select {
+    background: white;
+    border-color: #e5e7eb;
+  }
+
+  .dark .input,
+  .dark .select {
+    background: #111827;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .badge,
+  .badge-paid,
+  .badge-pending,
+  .badge-partial {
+    border-radius: 999px;
+    letter-spacing: 0;
   }
 
   .modal-overlay {

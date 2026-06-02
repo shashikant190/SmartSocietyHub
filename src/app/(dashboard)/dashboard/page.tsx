@@ -444,7 +444,6 @@ function PriorityCard({
   label,
   value,
   icon: Icon,
-  gradient,
   illustration,
   reverse = false,
 }: {
@@ -452,26 +451,25 @@ function PriorityCard({
   label: string;
   value: string;
   icon: typeof Shield;
-  gradient: string;
   illustration: PriorityIllustration;
   reverse?: boolean;
 }) {
   return (
-    <Link href={href} aria-label={label} className="group block h-full min-w-[238px] lg:min-w-0">
-      <div className={`relative flex min-h-[132px] h-full items-center overflow-hidden border border-white/40 bg-linear-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[1.75rem_1.25rem_1.75rem_1.25rem]" : "rounded-[1.25rem_1.75rem_1.25rem_1.75rem]"}`}>
-        <div className="absolute -bottom-7 -right-8 h-32 w-40 text-white opacity-70 transition-transform duration-500 group-hover:-rotate-2 group-hover:scale-105">
+    <Link href={href} aria-label={label} className="group block h-full min-w-0">
+      <div className={`relative flex h-full min-h-[124px] items-center overflow-hidden border border-orange-100 bg-white p-3 shadow-[0_14px_34px_-26px_rgba(15,23,42,0.65)] transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-[#111827] sm:min-h-[132px] sm:p-4 ${reverse ? "rounded-[1.75rem_1.25rem_1.75rem_1.25rem]" : "rounded-[1.25rem_1.75rem_1.25rem_1.75rem]"}`}>
+        <div className="absolute -bottom-7 -right-10 h-28 w-36 text-primary opacity-16 transition-transform duration-500 group-hover:-rotate-2 group-hover:scale-105 dark:opacity-25 sm:h-32 sm:w-40">
           <PriorityIllustrationArt type={illustration} />
         </div>
-        <div className="relative z-10 flex w-full items-center gap-3 pr-10 sm:pr-12">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/30 bg-white/20 shadow-sm backdrop-blur-md">
-            <Icon className="h-6 w-6 text-white" />
+        <div className="relative z-10 flex w-full items-center gap-2 pr-1 sm:gap-3 sm:pr-10">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-orange-100 bg-orange-50 text-primary shadow-sm dark:border-orange-500/20 dark:bg-orange-500/10 sm:h-14 sm:w-14">
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <div className="h-12 w-px shrink-0 bg-white/25" />
+          <div className="h-11 w-px shrink-0 bg-orange-100 dark:bg-white/10 sm:h-12" />
           <div className="min-w-0 flex-1">
-            <h3 className="mb-2 max-w-[12rem] border-b border-white/25 pb-1.5 text-[1.05rem] font-black leading-[1.12] text-white sm:text-lg">
+            <h3 className="mb-2 max-w-full border-b border-orange-100 pb-1.5 text-[0.98rem] font-black leading-[1.12] text-slate-950 dark:border-white/10 dark:text-slate-50 sm:text-lg">
               {label}
             </h3>
-            <p className="text-sm font-bold leading-tight text-white/90 sm:text-base">{value}</p>
+            <p className="text-sm font-black leading-tight text-primary sm:text-base">{value}</p>
           </div>
         </div>
       </div>
@@ -548,11 +546,11 @@ function ResidentDashboard({
               </div>
             </section>
 
-            <section className="-mx-1 flex items-stretch gap-3 overflow-x-auto px-1 pb-1 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-4 lg:overflow-visible lg:px-0 xl:grid-cols-4">
-              <PriorityCard href="/my-bills" label={t("Pending Bills")} value={formatCurrency(myBills?.stats?.totalPending || 0)} icon={CreditCard} gradient="from-orange-500 to-orange-700" illustration="bill" />
-              <PriorityCard href="/complaints" label={t("Open Complaints")} value={`${data?.openComplaints || 0} ${t("Open")}`} icon={AlertTriangle} gradient="from-sky-500 to-blue-700" illustration="complaint" reverse />
-              <PriorityCard href="/my-visitors" label={t("Visitors Today")} value={`${activeVisitors} ${t("Today")}`} icon={UserCheck} gradient="from-violet-500 to-purple-700" illustration="visitor" />
-              <PriorityCard href="/events" label={t("Upcoming Events")} value={`${events.length} ${t("Events")}`} icon={CalendarCheck} gradient="from-emerald-500 to-emerald-700" illustration="event" reverse />
+            <section className="grid grid-cols-2 items-stretch gap-3 pb-1 lg:grid-cols-2 lg:gap-4 xl:grid-cols-4">
+              <PriorityCard href="/my-bills" label={t("Pending Bills")} value={formatCurrency(myBills?.stats?.totalPending || 0)} icon={CreditCard} illustration="bill" />
+              <PriorityCard href="/complaints" label={t("Open Complaints")} value={`${data?.openComplaints || 0} ${t("Open")}`} icon={AlertTriangle} illustration="complaint" reverse />
+              <PriorityCard href="/my-visitors" label={t("Visitors Today")} value={`${activeVisitors} ${t("Today")}`} icon={UserCheck} illustration="visitor" />
+              <PriorityCard href="/events" label={t("Upcoming Events")} value={`${events.length} ${t("Events")}`} icon={CalendarCheck} illustration="event" reverse />
             </section>
 
             <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
