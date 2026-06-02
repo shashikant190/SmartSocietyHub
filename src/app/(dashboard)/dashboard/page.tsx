@@ -388,12 +388,64 @@ function formatShortTime(date: string | null | undefined, language: string) {
   return new Date(date).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 }
 
+type PriorityIllustration = "bill" | "complaint" | "visitor" | "event";
+
+function PriorityIllustrationArt({ type }: { type: PriorityIllustration }) {
+  if (type === "bill") {
+    return (
+      <svg viewBox="0 0 160 130" aria-hidden="true" className="h-full w-full">
+        <rect x="42" y="18" width="74" height="92" rx="14" fill="currentColor" opacity="0.18" />
+        <rect x="54" y="34" width="50" height="8" rx="4" fill="currentColor" opacity="0.35" />
+        <rect x="54" y="52" width="36" height="6" rx="3" fill="currentColor" opacity="0.26" />
+        <rect x="54" y="66" width="44" height="6" rx="3" fill="currentColor" opacity="0.26" />
+        <circle cx="112" cy="84" r="24" fill="currentColor" opacity="0.28" />
+        <path d="M108 74h15M108 84h15M111 74c14 0 14 20 0 20" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round" opacity="0.4" />
+        <path d="M42 110h74" stroke="currentColor" strokeWidth="8" strokeLinecap="round" opacity="0.2" />
+      </svg>
+    );
+  }
+
+  if (type === "complaint") {
+    return (
+      <svg viewBox="0 0 160 130" aria-hidden="true" className="h-full w-full">
+        <path d="M80 18 140 110H20L80 18Z" fill="currentColor" opacity="0.2" />
+        <path d="M80 38 124 102H36L80 38Z" fill="none" stroke="currentColor" strokeWidth="8" strokeLinejoin="round" opacity="0.32" />
+        <path d="M80 58v26" stroke="currentColor" strokeWidth="10" strokeLinecap="round" opacity="0.45" />
+        <circle cx="80" cy="100" r="6" fill="currentColor" opacity="0.5" />
+        <circle cx="130" cy="34" r="18" fill="currentColor" opacity="0.16" />
+      </svg>
+    );
+  }
+
+  if (type === "visitor") {
+    return (
+      <svg viewBox="0 0 160 130" aria-hidden="true" className="h-full w-full">
+        <circle cx="76" cy="44" r="26" fill="currentColor" opacity="0.2" />
+        <path d="M38 112c6-26 22-40 48-40s42 14 48 40" fill="currentColor" opacity="0.22" />
+        <path d="M110 46 122 58l25-30" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" opacity="0.44" />
+        <circle cx="118" cy="96" r="28" fill="currentColor" opacity="0.13" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 160 130" aria-hidden="true" className="h-full w-full">
+      <rect x="30" y="32" width="102" height="84" rx="16" fill="currentColor" opacity="0.2" />
+      <path d="M30 56h102" stroke="currentColor" strokeWidth="8" opacity="0.28" />
+      <path d="M52 20v26M110 20v26" stroke="currentColor" strokeWidth="10" strokeLinecap="round" opacity="0.42" />
+      <path d="m58 88 18 18 42-46" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" opacity="0.42" />
+      <circle cx="132" cy="32" r="20" fill="currentColor" opacity="0.12" />
+    </svg>
+  );
+}
+
 function PriorityCard({
   href,
   label,
   value,
   icon: Icon,
   gradient,
+  illustration,
   reverse = false,
 }: {
   href: string;
@@ -401,20 +453,25 @@ function PriorityCard({
   value: string;
   icon: typeof Shield;
   gradient: string;
+  illustration: PriorityIllustration;
   reverse?: boolean;
 }) {
   return (
-    <Link href={href} className="group block min-w-[166px] lg:min-w-0">
-      <div className={`relative flex min-h-[112px] items-center overflow-hidden border border-white/40 bg-linear-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[1.75rem_1.25rem_1.75rem_1.25rem]" : "rounded-[1.25rem_1.75rem_1.25rem_1.75rem]"}`}>
-        <Icon className="absolute -bottom-3 -right-3 h-20 w-20 text-white opacity-[0.08] transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-110" />
-        <div className="relative z-10 flex w-full items-center gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/20 shadow-sm backdrop-blur-md">
+    <Link href={href} aria-label={label} className="group block h-full min-w-[238px] lg:min-w-0">
+      <div className={`relative flex min-h-[132px] h-full items-center overflow-hidden border border-white/40 bg-linear-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[1.75rem_1.25rem_1.75rem_1.25rem]" : "rounded-[1.25rem_1.75rem_1.25rem_1.75rem]"}`}>
+        <div className="absolute -bottom-7 -right-8 h-32 w-40 text-white opacity-70 transition-transform duration-500 group-hover:-rotate-2 group-hover:scale-105">
+          <PriorityIllustrationArt type={illustration} />
+        </div>
+        <div className="relative z-10 flex w-full items-center gap-3 pr-10 sm:pr-12">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/30 bg-white/20 shadow-sm backdrop-blur-md">
             <Icon className="h-6 w-6 text-white" />
           </div>
-          <div className="h-10 w-px shrink-0 bg-white/20" />
+          <div className="h-12 w-px shrink-0 bg-white/25" />
           <div className="min-w-0 flex-1">
-            <h3 className="mb-1 truncate border-b border-white/20 pb-1 text-base font-black leading-tight text-white">{label}</h3>
-            <p className="truncate text-xs font-semibold text-white/85">{value}</p>
+            <h3 className="mb-2 max-w-[12rem] border-b border-white/25 pb-1.5 text-[1.05rem] font-black leading-[1.12] text-white sm:text-lg">
+              {label}
+            </h3>
+            <p className="text-sm font-bold leading-tight text-white/90 sm:text-base">{value}</p>
           </div>
         </div>
       </div>
@@ -491,11 +548,11 @@ function ResidentDashboard({
               </div>
             </section>
 
-            <section className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible lg:px-0 xl:grid-cols-4">
-              <PriorityCard href="/my-bills" label={t("Pending Bills")} value={formatCurrency(myBills?.stats?.totalPending || 0)} icon={CreditCard} gradient="from-orange-500 to-orange-700" />
-              <PriorityCard href="/complaints" label={t("Open Complaints")} value={`${data?.openComplaints || 0} ${t("Open")}`} icon={AlertTriangle} gradient="from-sky-500 to-blue-700" reverse />
-              <PriorityCard href="/my-visitors" label={t("Visitors Today")} value={`${activeVisitors} ${t("Today")}`} icon={UserCheck} gradient="from-violet-500 to-purple-700" />
-              <PriorityCard href="/events" label={t("Upcoming Events")} value={`${events.length} ${t("Events")}`} icon={CalendarCheck} gradient="from-emerald-500 to-emerald-700" reverse />
+            <section className="-mx-1 flex items-stretch gap-3 overflow-x-auto px-1 pb-1 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-4 lg:overflow-visible lg:px-0 xl:grid-cols-4">
+              <PriorityCard href="/my-bills" label={t("Pending Bills")} value={formatCurrency(myBills?.stats?.totalPending || 0)} icon={CreditCard} gradient="from-orange-500 to-orange-700" illustration="bill" />
+              <PriorityCard href="/complaints" label={t("Open Complaints")} value={`${data?.openComplaints || 0} ${t("Open")}`} icon={AlertTriangle} gradient="from-sky-500 to-blue-700" illustration="complaint" reverse />
+              <PriorityCard href="/my-visitors" label={t("Visitors Today")} value={`${activeVisitors} ${t("Today")}`} icon={UserCheck} gradient="from-violet-500 to-purple-700" illustration="visitor" />
+              <PriorityCard href="/events" label={t("Upcoming Events")} value={`${events.length} ${t("Events")}`} icon={CalendarCheck} gradient="from-emerald-500 to-emerald-700" illustration="event" reverse />
             </section>
 
             <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
