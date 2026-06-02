@@ -45,7 +45,7 @@ function DashboardShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#eef8fb] dark:bg-[#07111f] lg:bg-surface">
+    <div className="flex h-screen overflow-hidden bg-[#fff7ed] dark:bg-[#0f172a] lg:bg-surface">
       {!sidebarHidden && (
         <Sidebar
           societyName={user.societyName}

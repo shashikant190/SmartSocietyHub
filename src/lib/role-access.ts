@@ -19,6 +19,7 @@ export type UserRole =
 // Routes that ALL authenticated users can access (login, dashboard shell, API auth)
 const UNIVERSAL_ROUTES = [
   "/dashboard",
+  "/profile",
   "/api/auth",
   "/api/dashboard",
   "/api/legal-adviser",

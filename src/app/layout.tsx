@@ -18,7 +18,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#3B82F6",
+  themeColor: "#FF6B00",
 };
 
 export const metadata: Metadata = {
@@ -44,26 +44,22 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta id="theme-color-meta" name="theme-color" content="#3B82F6" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function () {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  var dark = stored ? stored === 'dark' : systemDark;
-                  document.documentElement.classList.toggle('dark', dark);
-                  document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-                  var meta = document.querySelector('meta[name="theme-color"]');
-                  if (meta) meta.setAttribute('content', dark ? '#0B1220' : '#3B82F6');
-                } catch (_) {}
-              })();
-            `,
-          }}
-        />
+        <meta id="theme-color-meta" name="theme-color" content="#FF6B00" />
       </head>
       <body className={`${inter.className} antialiased`}>
+        <Script id="theme-init" strategy="beforeInteractive">{`
+          (function () {
+            try {
+              var stored = localStorage.getItem('theme');
+              var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var dark = stored ? stored === 'dark' : systemDark;
+              document.documentElement.classList.toggle('dark', dark);
+              document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+              var meta = document.querySelector('meta[name="theme-color"]');
+              if (meta) meta.setAttribute('content', dark ? '#0F172A' : '#FF6B00');
+            } catch (_) {}
+          })();
+        `}</Script>
         <ToastProvider />
         <I18nProvider>
           <AppDialogProvider>

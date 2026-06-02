@@ -228,7 +228,7 @@ function CategoryCard({ category, expanded, count, onClick }: { category: Catego
       onClick={onClick}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.99 }}
-      className={`relative flex h-[176px] w-full overflow-hidden rounded-2xl bg-gradient-to-br ${category.color} p-4 text-left text-white transition-all duration-300 ${
+      className={`relative flex h-[176px] w-full overflow-hidden rounded-2xl bg-linear-to-br ${category.color} p-4 text-left text-white transition-all duration-300 ${
         expanded
           ? `shadow-lg ${category.shadow} ring-2 ring-white/70`
           : "shadow-sm opacity-95 hover:opacity-100"
@@ -404,8 +404,8 @@ function PriorityCard({
   reverse?: boolean;
 }) {
   return (
-    <Link href={href} className="group block">
-      <div className={`relative flex min-h-[112px] items-center overflow-hidden border border-white/40 bg-gradient-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[2rem_1.5rem_2rem_1.5rem]" : "rounded-[1.5rem_2rem_1.5rem_2rem]"}`}>
+    <Link href={href} className="group block min-w-[166px] lg:min-w-0">
+      <div className={`relative flex min-h-[112px] items-center overflow-hidden border border-white/40 bg-linear-to-br ${gradient} p-4 shadow-sm transition-transform duration-300 hover:-translate-y-1 ${reverse ? "rounded-[1.75rem_1.25rem_1.75rem_1.25rem]" : "rounded-[1.25rem_1.75rem_1.25rem_1.75rem]"}`}>
         <Icon className="absolute -bottom-3 -right-3 h-20 w-20 text-white opacity-[0.08] transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-110" />
         <div className="relative z-10 flex w-full items-center gap-3">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/30 bg-white/20 shadow-sm backdrop-blur-md">
@@ -453,11 +453,11 @@ function ResidentDashboard({
   const activeVisitors = visitors.filter((visitor) => ["pending_approval", "expected", "inside", "approved"].includes(visitor.status)).length;
 
   return (
-    <div className="-m-3 min-h-full bg-[#eef8fb] p-3 dark:bg-[#07111f] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
+    <div className="-m-3 min-h-full bg-[#fff7ed] p-3 dark:bg-[#0f172a] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-[1600px] space-y-6 pb-24 lg:pb-8">
         <div className="flex flex-col gap-6 lg:flex-row">
           <div className="w-full flex-1 space-y-6 lg:w-2/3 xl:w-[70%]">
-            <section className="relative flex min-h-[210px] items-center justify-between overflow-hidden rounded-[2rem] bg-[#000328] p-6 shadow-sm lg:min-h-[230px] lg:p-8">
+            <section className="relative flex min-h-[172px] items-center justify-between overflow-hidden rounded-[1.75rem] bg-[#22110a] p-5 shadow-sm sm:min-h-[210px] sm:rounded-[2rem] sm:p-6 lg:min-h-[230px] lg:p-8">
               <div className="absolute inset-0">
                 <img
                   src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=80"
@@ -465,11 +465,11 @@ function ResidentDashboard({
                   className="h-full w-full object-cover opacity-60"
                 />
               </div>
-              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,3,40,0.96)_0%,rgba(0,69,142,0.42)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(25,10,0,0.96)_0%,rgba(255,107,0,0.34)_100%)]" />
               <div className="relative z-10 max-w-xl">
-                <h1 className="text-4xl font-black leading-[1.08] tracking-tight text-white drop-shadow-md lg:text-5xl">
+                <h1 className="text-3xl font-black leading-[1.08] tracking-tight text-white drop-shadow-md sm:text-4xl lg:text-5xl">
                   {t(greeting().charAt(0).toUpperCase() + greeting().slice(1))}, <br className="hidden lg:block" />
-                  <span className="text-emerald-400">{user?.name?.split(" ")[0] || t("Residents")}</span>
+                  <span className="text-orange-300">{user?.name?.split(" ")[0] || t("Residents")}</span>
                 </h1>
                 <p className="mt-3 flex flex-wrap items-center gap-2 text-sm font-medium text-white/75 lg:text-base">
                   <Building2 className="h-4 w-4 text-white/50" />
@@ -480,7 +480,7 @@ function ResidentDashboard({
               </div>
               <div className="relative z-10 hidden shrink-0 pr-2 sm:block lg:pr-6">
                 <div className="relative h-32 w-32 rounded-full border border-white/40 bg-white/20 p-2 shadow-xl backdrop-blur-md lg:h-44 lg:w-44">
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-blue-600 text-4xl font-black text-white lg:text-6xl">
+                  <div className="flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-orange-400 to-orange-700 text-4xl font-black text-white lg:text-6xl">
                     {user?.name?.slice(0, 1) || "R"}
                   </div>
                   <div className="absolute -bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-white/95 px-4 py-1.5 shadow-sm backdrop-blur-sm dark:bg-slate-900/95">
@@ -491,11 +491,11 @@ function ResidentDashboard({
               </div>
             </section>
 
-            <section className="grid grid-cols-2 gap-3 lg:gap-4 xl:grid-cols-4">
-              <PriorityCard href="/my-bills" label={t("My Bills")} value={`${t("Pending")}: ${formatCurrency(myBills?.stats?.totalPending || 0)}`} icon={CreditCard} gradient="from-emerald-500 to-emerald-700" />
-              <PriorityCard href="/staff" label={t("Staff & Daily Help")} value={`${t("Scheduled")}: ${staff.length}`} icon={Wrench} gradient="from-blue-500 to-blue-700" reverse />
-              <PriorityCard href="/packages" label={t("Parcel Desk")} value={`${t("Pending")}: ${pendingPackages}`} icon={Package} gradient="from-purple-500 to-purple-700" />
-              <PriorityCard href="/emergency" label={t("SOS & Safety")} value={t("Alert security")} icon={Phone} gradient="from-rose-500 to-rose-700" reverse />
+            <section className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible lg:px-0 xl:grid-cols-4">
+              <PriorityCard href="/my-bills" label={t("Pending Bills")} value={formatCurrency(myBills?.stats?.totalPending || 0)} icon={CreditCard} gradient="from-orange-500 to-orange-700" />
+              <PriorityCard href="/complaints" label={t("Open Complaints")} value={`${data?.openComplaints || 0} ${t("Open")}`} icon={AlertTriangle} gradient="from-sky-500 to-blue-700" reverse />
+              <PriorityCard href="/my-visitors" label={t("Visitors Today")} value={`${activeVisitors} ${t("Today")}`} icon={UserCheck} gradient="from-violet-500 to-purple-700" />
+              <PriorityCard href="/events" label={t("Upcoming Events")} value={`${events.length} ${t("Events")}`} icon={CalendarCheck} gradient="from-emerald-500 to-emerald-700" reverse />
             </section>
 
             <section className="grid grid-cols-1 gap-4 lg:gap-6 xl:grid-cols-2">
@@ -547,19 +547,20 @@ function ResidentDashboard({
               </div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
                 {[
+                  { href: "/my-bills", label: "My Bills", icon: CreditCard, bg: "from-orange-400 to-orange-600", shadow: "shadow-orange-500/30" },
+                  { href: "/complaints", label: "Complaints", icon: AlertTriangle, bg: "from-rose-400 to-pink-500", shadow: "shadow-rose-500/30" },
+                  { href: "/my-visitors", label: "Visitors", icon: UserCheck, bg: "from-sky-400 to-blue-500", shadow: "shadow-blue-500/30" },
+                  { href: "/notices", label: "Notices", icon: Megaphone, bg: "from-amber-400 to-orange-500", shadow: "shadow-orange-500/30" },
                   { href: "/amenities", label: "Amenities", icon: Building2, bg: "from-teal-400 to-emerald-500", shadow: "shadow-emerald-500/30" },
-                  { href: "/complaints", label: "Helpdesk", icon: AlertTriangle, bg: "from-rose-400 to-pink-500", shadow: "shadow-rose-500/30" },
-                  { href: "/events", label: "Events", icon: CalendarCheck, bg: "from-amber-400 to-orange-500", shadow: "shadow-orange-500/30" },
-                  { href: "/marketplace", label: "Buy & Sell", icon: ShoppingBag, bg: "from-sky-400 to-blue-500", shadow: "shadow-blue-500/30" },
                   { href: "/parking", label: "Parking", icon: Car, bg: "from-lime-400 to-emerald-500", shadow: "shadow-lime-500/30" },
-                  { href: "/polls", label: "Polls", icon: Vote, bg: "from-fuchsia-400 to-purple-500", shadow: "shadow-fuchsia-500/30" },
-                  { href: "/documents", label: "Docs", icon: FolderOpen, bg: "from-slate-500 to-slate-700", shadow: "shadow-slate-500/30" },
+                  { href: "/packages", label: "Packages", icon: Package, bg: "from-purple-400 to-purple-600", shadow: "shadow-purple-500/30" },
+                  { href: "/emergency", label: "Emergency", icon: Phone, bg: "from-red-500 to-red-700", shadow: "shadow-red-500/30" },
                 ].map((service, index) => {
                   const Icon = service.icon;
                   return (
                     <Link key={service.href} href={service.href} className={`group relative flex flex-col items-center justify-center gap-4 overflow-hidden border border-border bg-white p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-lg dark:bg-slate-900 ${index % 2 === 0 ? "rounded-[2rem_2.5rem_2rem_2.5rem]" : "rounded-[2.5rem_2rem_2.5rem_2rem]"}`}>
-                      <div className={`absolute inset-0 bg-gradient-to-br ${service.bg} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.04]`} />
-                      <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${service.bg} shadow-lg ${service.shadow} transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110`}>
+                      <div className={`absolute inset-0 bg-linear-to-br ${service.bg} opacity-0 transition-opacity duration-300 group-hover:opacity-[0.04]`} />
+                      <div className={`relative flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br ${service.bg} shadow-lg ${service.shadow} transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110`}>
                         <Icon className="h-7 w-7 text-white" />
                       </div>
                       <span className="relative z-10 text-sm font-black text-text-primary">{t(service.label)}</span>
@@ -702,10 +703,10 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="-m-3 min-h-full bg-[#eef8fb] p-3 dark:bg-[#07111f] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
+    <div className="-m-3 min-h-full bg-[#fff7ed] p-3 dark:bg-[#0f172a] sm:-m-4 sm:p-4 lg:-m-6 lg:p-8">
       <div className="mx-auto max-w-6xl space-y-6">
         <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-900/85 sm:p-7">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top_right,rgba(14,165,233,0.18),transparent_18rem)] sm:hidden" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top_right,rgba(255,107,0,0.20),transparent_18rem)] sm:hidden" />
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
             <div>
               <div className="mb-3 flex items-center gap-2">
@@ -719,20 +720,20 @@ export default function DashboardPage() {
                 {t(greeting().charAt(0).toUpperCase() + greeting().slice(1))}, {user?.name || t("User")} · {user?.societyName || t("Your society")} {user?.flatNumber ? `· ${t("Flat")} ${user.flatNumber}` : ""}
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:min-w-[360px] lg:grid-cols-2">
-              <div className="rounded-2xl border border-primary/10 bg-primary/5 p-4 dark:bg-primary/10">
+            <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:min-w-[360px] lg:grid-cols-2">
+              <div className="min-w-[144px] rounded-2xl border border-primary/10 bg-primary/5 p-4 dark:bg-primary/10 sm:min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? t("Pending") : t("My Dues")}</p>
                 <p className="mt-1 text-xl font-black text-primary">{formatCurrency(dueAmount)}</p>
               </div>
-              <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/40">
+              <div className="min-w-[144px] rounded-2xl border border-emerald-100 bg-emerald-50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/40 sm:min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{isAdmin ? t("Collected") : t("Paid")}</p>
                 <p className="mt-1 text-xl font-black text-emerald-700">{formatCurrency(paidAmount)}</p>
               </div>
-              <div className="rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/60 dark:bg-amber-950/40">
+              <div className="min-w-[144px] rounded-2xl border border-amber-100 bg-amber-50 p-4 dark:border-amber-900/60 dark:bg-amber-950/40 sm:min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{t("Visitors")}</p>
                 <p className="mt-1 text-xl font-black text-amber-700">{loading ? "--" : data?.visitorsToday || 0}</p>
               </div>
-              <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40">
+              <div className="min-w-[144px] rounded-2xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-900/60 dark:bg-blue-950/40 sm:min-w-0">
                 <p className="text-[10px] font-black uppercase tracking-widest text-text-secondary">{t("Helpdesk")}</p>
                 <p className="mt-1 text-xl font-black text-blue-700">{loading ? "--" : data?.openComplaints || 0}</p>
               </div>

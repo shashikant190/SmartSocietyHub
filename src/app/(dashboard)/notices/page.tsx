@@ -201,7 +201,7 @@ export default function NoticesPage() {
 
         {/* Sidebar Highlight - Mobile Responsive Hide/Show */}
         <div className="space-y-6 hidden lg:block">
-           <div className="card !p-5 bg-gradient-to-br from-indigo-700 to-primary text-white shadow-lg border-none">
+           <div className="card !p-5 bg-linear-to-br from-indigo-700 to-primary text-white shadow-lg border-none">
               <h3 className="font-bold flex items-center gap-2 mb-4 text-[11px] uppercase tracking-[0.1em] text-white/70">
                  <Zap className="w-4 h-4" /> Live Feed
               </h3>

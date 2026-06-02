@@ -297,7 +297,7 @@ export default function GuardGatePage() {
 
   if (!guard) {
     return (
-      <div className="min-h-[100dvh] bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-dvh bg-slate-950 flex items-center justify-center p-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
             <div className="w-20 h-20 mx-auto rounded-3xl bg-primary flex items-center justify-center shadow-2xl shadow-primary/30 mb-4">
@@ -342,7 +342,7 @@ export default function GuardGatePage() {
 
   const expectedVisitors = visitors.filter((visitor) => visitor.status === "expected");
   return (
-    <div className="min-h-[100dvh] bg-slate-50 pb-24">
+    <div className="min-h-dvh bg-slate-50 pb-24">
       <div className="bg-primary text-white p-4 safe-top">
         <div className="flex items-center justify-between max-w-xl mx-auto">
           <div className="flex items-center gap-3">

@@ -4,7 +4,7 @@ import { Siren, Phone, RefreshCw } from "lucide-react";
 
 export default function ExpiredPage() {
   return (
-    <div className="min-h-[100dvh] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
+    <div className="min-h-dvh bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-6">
       <div className="max-w-sm w-full text-center">
         <div className="w-20 h-20 mx-auto rounded-3xl bg-red-500/20 flex items-center justify-center mb-6">
           <Siren className="w-10 h-10 text-red-400" />

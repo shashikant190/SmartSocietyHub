@@ -175,14 +175,14 @@ export default function Sidebar({
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 h-[100dvh] pb-safe overflow-hidden border-r border-blue-100/80 bg-white/95 shadow-xl shadow-blue-950/5 backdrop-blur flex flex-col transition-[width,transform] duration-300 ease-in-out dark:border-slate-800 dark:bg-[#0f172a]/95 lg:translate-x-0 lg:rounded-r-[2rem] ${
-          isCompact ? "w-[5.25rem]" : "w-72 max-w-[18rem]"
+        className={`fixed top-0 left-0 z-50 h-dvh pb-safe overflow-hidden border-r border-blue-100/80 bg-white/95 shadow-xl shadow-blue-950/5 backdrop-blur flex flex-col transition-[width,transform] duration-300 ease-in-out dark:border-slate-800 dark:bg-[#0f172a]/95 lg:translate-x-0 lg:rounded-r-4xl ${
+          isCompact ? "w-21" : "w-72 max-w-[18rem]"
         } ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:static lg:z-auto`}
       >
         {/* Society header */}
-        <div className={`relative overflow-hidden bg-gradient-to-br from-blue-400 to-blue-600 text-white ${isCompact ? "p-3" : "p-4"} ${!isCompact ? "rounded-br-[1.75rem]" : ""}`}>
+        <div className={`relative overflow-hidden bg-linear-to-br from-blue-400 to-blue-600 text-white ${isCompact ? "p-3" : "p-4"} ${!isCompact ? "rounded-br-[1.75rem]" : ""}`}>
           <div className={`flex w-full items-center ${isCompact ? "justify-center" : "gap-3"}`}>
             <div className="flex h-11 w-11 min-w-11 items-center justify-center rounded-2xl bg-white/18 shadow-sm ring-1 ring-white/20 backdrop-blur">
               <Building2 className="h-5 w-5 text-white" />
@@ -254,7 +254,7 @@ export default function Sidebar({
                         }`}
                         onClick={onClose}
                       >
-                        <Icon className={`${isCompact ? "h-5 w-5" : "h-[18px] w-[18px]"} shrink-0`} />
+                        <Icon className={`${isCompact ? "h-5 w-5" : "h-4.5 w-4.5"} shrink-0`} />
                         {!isCompact && <span className="truncate">{t(item.label)}</span>}
                       </Link>
                     );
@@ -284,7 +284,7 @@ export default function Sidebar({
                 : "w-full rounded-2xl px-4 py-4 text-sm"
             }`}
           >
-            <LogOut className="h-[18px] w-[18px]" />
+            <LogOut className="h-4.5 w-4.5" />
             {!isCompact && t("Sign Out")}
           </button>
         </div>

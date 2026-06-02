@@ -209,7 +209,7 @@ export default function ParkingPage() {
 
       {/* Member's Personal Section */}
       {!isAdmin && user?.flatNumber && (
-        <div className="bg-gradient-to-br from-indigo-50/50 to-white p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-indigo-100/50 shadow-sm">
+        <div className="bg-linear-to-br from-indigo-50/50 to-white p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border border-indigo-100/50 shadow-sm">
            <div className="flex items-center gap-3 mb-6">
               <div className="w-1 h-5 sm:w-1.5 sm:h-6 bg-primary rounded-full" />
               <h2 className="text-base sm:text-lg font-bold text-text-primary tracking-tight">My Allocations</h2>
